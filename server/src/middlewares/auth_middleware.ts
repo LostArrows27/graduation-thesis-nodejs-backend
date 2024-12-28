@@ -9,6 +9,7 @@ export const checkAccessToken = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    // 1. check auth
     const { accessToken } = req.body;
     if (!accessToken) {
       res.status(400).json({ error: "accessToken is required" });
@@ -29,6 +30,7 @@ export const checkAccessToken = async (
       return;
     }
 
+    // 2. continue request
     req.body.user = user;
 
     next();

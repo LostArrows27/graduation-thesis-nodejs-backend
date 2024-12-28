@@ -3,7 +3,8 @@ import { Request } from "express";
 
 export interface AuthUserRequest extends Request {
   body: {
-    accessToken: string;
+    accessToken?: string;
     user?: User;
+    messageID?: string;
   };
 }
