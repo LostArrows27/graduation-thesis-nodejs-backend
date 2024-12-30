@@ -4,7 +4,7 @@ import { Request } from "express";
 export interface AuthUserRequest extends Request {
   body: {
     accessToken?: string;
-    user?: User;
-    messageID?: string;
+    user: User;
+    renderQueueId?: string;
   };
 }

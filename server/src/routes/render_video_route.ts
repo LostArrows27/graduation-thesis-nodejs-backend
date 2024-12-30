@@ -4,6 +4,7 @@ import { AuthUserRequest } from "../types/app.type";
 import redisClient from "../configs/redis";
 import { logger } from "../helpers/logging/logger";
 import { wait } from "../helpers/timer/wait";
+import supabase from "../configs/supabase";
 
 const videoRouter = express.Router();
 
@@ -13,10 +14,12 @@ const videoRouter = express.Router();
 
 1. client
   - user send request creat video
-  - system create a row in message table -> video + metadata{status: pending}
-  - system send to server {userId, messageId}
+  - system create a row 
+    - in message table -> video + metadata{status: pending}
+    - in video render table -> messageID (if video send in group)
+  - system send to server {userId, renderQueueId}
 2. server - HSET
-  - 1 user create 1 video at a time -> redis save `video:${userId}` with {status, type, messageId}
+  - 1 user create 1 video at a time -> redis save `video:${userId}` with {status, type, renderQueueId}
   - if user send another video request type -> confirm at client side
     - yes -> delete old request -> create new video request
     - no -> reject request  
@@ -24,7 +27,7 @@ const videoRouter = express.Router();
     1. all image in group
     2. selected image (choose + uploaded) -> image array
 3. cache video link
-  - SET video:userID:messageID videoLink (0 / https)
+  - SET video:userID:renderQueueId videoLink (0 / https)
 4. redis
   - HSET -> mark a user is request a video with (status + process %) -> delete after video created
   - SET -> mark a video is created with link -> 0 if not created
@@ -35,25 +38,31 @@ videoRouter.post(
   checkAccessToken,
   async (req: AuthUserRequest, res: Response) => {
     // 1. check params
-    const { user, messageID } = req.body;
+    const { user, renderQueueId } = req.body;
 
-    if (!user) {
-      res.status(401).json({ message: "Unauthorized user" });
+    if (!renderQueueId) {
+      res.status(400).json({ error: "renderQueueId is required" });
       return;
     }
 
-    if (!messageID) {
-      res.status(400).json({ error: "messageID is required" });
+    const { data } = await supabase
+      .from("video_render")
+      .select("*")
+      .eq("id", renderQueueId)
+      .single();
+
+    if (!data) {
+      res.status(400).json({ error: "Invalid renderQueueId" });
       return;
     }
-
-    const userId = user.id;
 
     logger.warn(`${user.email} is requesting to render a video.`);
 
     // 2. check if video has already been created
+    const userId = user.id;
+
     const videoLink = await redisClient.get(
-      `video:user-${userId}:msg-${messageID}`
+      `video:user-${userId}:render-${renderQueueId}`
     );
 
     if (videoLink && videoLink !== "0") {
@@ -80,7 +89,7 @@ videoRouter.post(
     // 4. add video to render queue
     await Promise.all([
       redisClient.hSet(`render:user-${userId}`, "status", "rendering"),
-      redisClient.set(`video:user-${userId}:msg-${messageID}`, "0"),
+      redisClient.set(`video:user-${userId}:render-${renderQueueId}`, "0"),
     ]);
     logger.warn(`Video is being rendered for ${user.email}`);
 
@@ -93,7 +102,7 @@ videoRouter.post(
     await Promise.all([
       redisClient.del(`render:user-${userId}`),
       redisClient.set(
-        `video:user-${userId}:msg-${messageID}`,
+        `video:user-${userId}:render-${renderQueueId}`,
         "https://video.com"
       ),
     ]);
