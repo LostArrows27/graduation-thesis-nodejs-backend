@@ -15,7 +15,6 @@ Config.setVideoImageFormat("jpeg");
 Config.setOverwriteOutput(true);
 Config.overrideWebpackConfig(enableTailwind);
 
-// NOTE: config perfomance + speeds
 Config.setCodec("h264");
 Config.setAudioCodec("mp3");
 Config.setConcurrency(10); // -> this give fastest render -> max(perfomance) = Math.floor(os.cpus().length / 2)
