@@ -1,3 +1,7 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
 export const config = {
   logLevel: process.env.NODE_ENV === "production" ? "info" : "debug",
   node_env: process.env.NODE_ENV || "development",

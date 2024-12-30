@@ -1,16 +1,23 @@
 import dotenv from "dotenv";
+
 dotenv.config();
 
 import app from "./app";
-import { connectRedis } from "./configs/redis";
 import { logger } from "./helpers/logging/logger";
+import { redisWorker } from "./workers/redis_worker";
+import { config } from "./configs/setting";
+import { connectAllRedisService } from "./configs/redis";
 
-const PORT = process.env.PORT || 5000;
+const startExternalServices = async () => {
+  await connectAllRedisService();
+  await redisWorker();
+};
 
 const startServer = async () => {
-  await connectRedis();
-  app.listen(PORT, () => {
-    logger.info(`Server running at http://localhost:${PORT}`);
+  await startExternalServices();
+
+  app.listen(config.port, () => {
+    logger.info(`Server running at http://localhost:${config.port}`);
   });
 };
 

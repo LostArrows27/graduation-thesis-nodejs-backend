@@ -1,38 +1,16 @@
 import express, { Response } from "express";
 import { checkAccessToken } from "../middlewares/auth_middleware";
 import { AuthUserRequest } from "../types/app.type";
-import redisClient from "../configs/redis";
+import { redisClient } from "../configs/redis";
 import { logger } from "../helpers/logging/logger";
-import { wait } from "../helpers/timer/wait";
 import supabase from "../configs/supabase";
+// import { wait } from "../helpers/timer/wait";
+// import supabase from "../configs/supabase";
 
 const videoRouter = express.Router();
 
 // TODO: add to HSET create-video-type -> "default" / "selected"
 
-/* A USER CAN ONLY REQUEST 1 VIDEO AT A TIME
-
-1. client
-  - user send request creat video
-  - system create a row 
-    - in message table -> video + metadata{status: pending}
-    - in video render table -> messageID (if video send in group)
-  - system send to server {userId, renderQueueId}
-2. server - HSET
-  - 1 user create 1 video at a time -> redis save `video:${userId}` with {status, type, renderQueueId}
-  - if user send another video request type -> confirm at client side
-    - yes -> delete old request -> create new video request
-    - no -> reject request  
-  - video request type
-    1. all image in group
-    2. selected image (choose + uploaded) -> image array
-3. cache video link
-  - SET video:userID:renderQueueId videoLink (0 / https)
-4. redis
-  - HSET -> mark a user is request a video with (status + process %) -> delete after video created
-  - SET -> mark a video is created with link -> 0 if not created
-
-*/
 videoRouter.post(
   "/render",
   checkAccessToken,
@@ -65,7 +43,7 @@ videoRouter.post(
       `video:user-${userId}:render-${renderQueueId}`
     );
 
-    if (videoLink && videoLink !== "0") {
+    if (videoLink && videoLink !== "start" && videoLink !== "rendering") {
       res.status(200).json({
         message: "Video has already been created.",
         url: videoLink,
@@ -73,7 +51,9 @@ videoRouter.post(
       return;
     }
 
-    // 3. check video process -> later add process %
+    // 3. check video process
+    // in step 2 + 3, if video not done
+    // -> so the set and hset not do yet
     const videoStatus = await redisClient.hGet(
       `render:user-${userId}`,
       "status"
@@ -89,31 +69,44 @@ videoRouter.post(
     // 4. add video to render queue
     await Promise.all([
       redisClient.hSet(`render:user-${userId}`, "status", "rendering"),
-      redisClient.set(`video:user-${userId}:render-${renderQueueId}`, "0"),
+      redisClient.set(`video:user-${userId}:render-${renderQueueId}`, "start"),
     ]);
     logger.warn(`Video is being rendered for ${user.email}`);
 
-    // Wait video render -> later turn to background process
-    // router just a place to add queue to render video
-    // bg task will see change in redis and start rendering
-    await wait(5000);
-
-    // 5. Done rendering
-    await Promise.all([
-      redisClient.del(`render:user-${userId}`),
-      redisClient.set(
-        `video:user-${userId}:render-${renderQueueId}`,
-        "https://video.com"
-      ),
-    ]);
-
-    logger.info(`Video has been created for ${user.email}`);
-
     res.json({
-      message: "Video has already been created.",
-      url: "https://video.com",
+      message: "Video has started rendering. Please wait.",
     });
   }
 );
 
 export default videoRouter;
+
+/* A USER CAN ONLY REQUEST 1 VIDEO AT A TIME
+
+1. client
+  - user send request creat video
+  - system create a row 
+    - in message table -> video + metadata{status: pending}
+    - in video render table -> messageID (if video send in group)
+  - system send to server {userId, renderQueueId}
+2. server - HSET
+  - 1 user create 1 video at a time -> redis save `video:${userId}` with {status, type, renderQueueId}
+  - if user send another video request type -> confirm at client side
+    - yes -> delete old request -> create new video request
+    - no -> reject request  
+  - video request type
+    1. all image in group
+    2. selected image (choose + uploaded) -> image array
+3. cache video link
+  - SET video:userID:renderQueueId videoLink (0 / https)
+4. redis
+  - HSET -> mark a user can only have 1 request at a time (status) -> delete after video created
+    1. "status: rendering" -> start rendering
+    2. disapear after video created
+    -> why not use SET ?
+    -> because worker is listen to SET
+  - SET -> mark a video is created with link
+    1. "start" -> start rendering
+    2. "rendering" -> in progress
+    3, "link" -> video link -> done
+*/
