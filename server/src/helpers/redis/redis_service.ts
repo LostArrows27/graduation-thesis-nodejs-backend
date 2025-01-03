@@ -1,6 +1,7 @@
 import { redisClient } from "../../configs/redis";
 import { logger } from "../logging/logger";
 
+// NOTE: file for more readable syntax -> XSTREAM / XREAD / ...
 export async function pushToStream(
   streamName: string,
   data: Record<string, string>
@@ -12,8 +13,7 @@ export async function pushToStream(
     }
 
     // Send the XADD command
-    const reply = await redisClient.sendCommand(["XADD", ...commandArgs]);
-    logger.info(`Data added to stream ${streamName} with ID: ${reply}`);
+    await redisClient.sendCommand(["XADD", ...commandArgs]);
   } catch (err) {
     logger.error("Error adding data to stream:", err);
   }

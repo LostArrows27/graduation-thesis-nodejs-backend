@@ -18,8 +18,6 @@ export async function fetchRenderImage() {
     return [];
   }
 
-  logger.info(`Fetched ${data.length} image meta data`);
-
   return data.filter((image: ImageMetaData) =>
     relatedImage(image)
   ) as ImageMetaData[];

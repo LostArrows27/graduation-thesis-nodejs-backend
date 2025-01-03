@@ -17,7 +17,7 @@ const startServer = async () => {
   await startExternalServices();
 
   app.listen(config.port, () => {
-    logger.info(`Server running at http://localhost:${config.port}`);
+    logger.info(`Server running at port ${config.port}`);
   });
 };
 

@@ -5,3 +5,5 @@ client/*
 server/node_modules/*
 server/.env
 server/public/*
+
+TODO.md

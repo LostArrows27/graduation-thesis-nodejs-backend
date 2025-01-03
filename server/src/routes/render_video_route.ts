@@ -3,9 +3,7 @@ import { checkAccessToken } from "../middlewares/auth_middleware";
 import { AuthUserRequest } from "../types/app.type";
 import { redisClient } from "../configs/redis";
 import { logger } from "../helpers/logging/logger";
-import supabase from "../configs/supabase";
-// import { wait } from "../helpers/timer/wait";
-// import supabase from "../configs/supabase";
+import { checkVideoParamsMiddelware } from "../middlewares/check_video_params_middleware";
 
 const videoRouter = express.Router();
 
@@ -14,29 +12,11 @@ const videoRouter = express.Router();
 videoRouter.post(
   "/render",
   checkAccessToken,
+  checkVideoParamsMiddelware,
   async (req: AuthUserRequest, res: Response) => {
-    // 1. check params
+    // Check if video has already been created
     const { user, renderQueueId } = req.body;
 
-    if (!renderQueueId) {
-      res.status(400).json({ error: "renderQueueId is required" });
-      return;
-    }
-
-    const { data } = await supabase
-      .from("video_render")
-      .select("*")
-      .eq("id", renderQueueId)
-      .single();
-
-    if (!data) {
-      res.status(400).json({ error: "Invalid renderQueueId" });
-      return;
-    }
-
-    logger.warn(`${user.email} is requesting to render a video.`);
-
-    // 2. check if video has already been created
     const userId = user.id;
 
     const videoLink = await redisClient.get(
@@ -51,7 +31,7 @@ videoRouter.post(
       return;
     }
 
-    // 3. check video process
+    // Check video process
     // in step 2 + 3, if video not done
     // -> so the set and hset not do yet
     const videoStatus = await redisClient.hGet(
@@ -66,12 +46,14 @@ videoRouter.post(
       return;
     }
 
-    // 4. add video to render queue
+    // Add video to render queue
     await Promise.all([
       redisClient.hSet(`render:user-${userId}`, "status", "rendering"),
       redisClient.set(`video:user-${userId}:render-${renderQueueId}`, "start"),
     ]);
-    logger.warn(`Video is being rendered for ${user.email}`);
+    logger.warn(
+      `User "${user.email?.split("@")[0]}" video has started rendering`
+    );
 
     res.json({
       message: "Video has started rendering. Please wait.",

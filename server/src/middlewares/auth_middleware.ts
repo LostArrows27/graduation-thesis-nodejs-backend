@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import supabase from "../configs/supabase";
 import { AuthUserRequest } from "../types/app.type";
 
@@ -20,6 +20,7 @@ export const checkAccessToken = async (
       data: { user },
       error,
     } = await supabase.auth.getUser(accessToken);
+
     if (error || !user) {
       res.status(401).json({ error: "Invalid or expired accessToken" });
       return;
@@ -32,7 +33,6 @@ export const checkAccessToken = async (
 
     // 2. continue request
     req.body.user = user;
-
     next();
   } catch (error) {
     res.status(500).json({ error: "An unexpected error occurred" });

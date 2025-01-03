@@ -50,8 +50,6 @@ export async function waitForLabeledImages(
   const pendingImages = new Set(imageIds);
   const labeledImages: Record<string, ImageMetaData> = {};
 
-  logger.info("Pending images:", pendingImages.size);
-
   while (pendingImages.size > 0) {
     try {
       // Read messages from the stream
@@ -62,10 +60,7 @@ export async function waitForLabeledImages(
         "0-0", // Start reading from the beginning
       ])) as Array<[string, Array<[string, string[]]>]> | null | undefined;
 
-      if (!messages) {
-        logger.info("No messages in the stream. Exiting loop.");
-        break;
-      }
+      if (!messages) break;
 
       let foundPendingImage = false;
 
@@ -87,10 +82,7 @@ export async function waitForLabeledImages(
         if (foundPendingImage) break;
       }
 
-      if (!foundPendingImage) {
-        logger.info("No pending image IDs found in the stream. Exiting loop.");
-        break;
-      }
+      if (!foundPendingImage) break;
     } catch (err) {
       logger.error("Error reading from stream:", err);
       break;
@@ -102,10 +94,7 @@ export async function waitForLabeledImages(
       try {
         const imageData = await redisClient.hGetAll(`image_job:${imageId}`);
 
-        if (!imageData) {
-          logger.error(`No data found for image ${imageId}`);
-          return;
-        }
+        if (!imageData) return;
 
         labeledImages[imageId] = {
           id: parseInt(imageId, 10),
