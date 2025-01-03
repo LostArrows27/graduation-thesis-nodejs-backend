@@ -1,11 +1,7 @@
+import chalk from "chalk";
 import { redisClient, redisWorkerClient } from "../configs/redis";
-import { fetchRenderImage } from "../helpers/fakers/fetch_render_image";
 import { logger } from "../helpers/logging/logger";
-import {
-  divideArray,
-  updateUnlabelImage,
-  waitForLabeledImages,
-} from "../helpers/redis/update_unlabel_image";
+import { fetchAndUpdateUnlabelImage } from "../helpers/redis/update_unlabel_image";
 import { wait } from "../helpers/timer/wait";
 
 // TODO: add un-labeled image logic
@@ -22,13 +18,11 @@ export const redisWorker = async () => {
   await redisWorkerClient.pSubscribe(
     "__keyspace@0__:video:user-*:render-*",
     async (_, channel) => {
-      // NOTE: process redis
-
+      // listen to insert key -> match key
       const key = channel.split(":").slice(1).join(":");
       const regex = /video:user-([\w-]+):render-([\w-]+)/;
       const match = key.match(regex);
 
-      // only process video:user-<userId>:render-<renderQueueId>
       if (!match) return;
 
       const [, userId, renderQueueId] = match;
@@ -36,28 +30,15 @@ export const redisWorker = async () => {
       const videoLinkStatus = await redisClient.get(key);
 
       // video is / already rendering
-      if (videoLinkStatus === "rendering" || videoLinkStatus !== "start")
+      if (videoLinkStatus === "rendering" || videoLinkStatus?.includes("http"))
         return;
 
       // videoLinkStatus === "start" -> start rendering
       await redisClient.set(key, "rendering");
 
-      // NOTE: fake fetch user images
-      const imagesMetaData = await fetchRenderImage();
+      const totalImage = fetchAndUpdateUnlabelImage();
 
-      // NOTE: update unlabel image
-      const { unlabelImages, relateImages } = divideArray(imagesMetaData);
-
-      await updateUnlabelImage(unlabelImages);
-
-      // NOTE: wait all label image done
-      const imageLabled = await waitForLabeledImages(
-        unlabelImages.map((image) => String(image.id))
-      );
-
-      const totalImage = [...imageLabled, relateImages];
-
-      // TODO: fake render video -> using totalImage to render video
+      // fake render video -> using totalImage to render video
       await wait(5000);
 
       await Promise.all([
@@ -68,7 +49,7 @@ export const redisWorker = async () => {
         ),
       ]);
 
-      logger.info(`Finish rendering video for user-${userId}`);
+      logger.info(`Finish rendering video for ${chalk.blue(`user-${userId}`)}`);
     }
   );
 };

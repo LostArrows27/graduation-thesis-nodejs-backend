@@ -1,6 +1,7 @@
 import { pino } from "pino";
 import pinoHttp from "pino-http";
 import { config } from "../../configs/setting";
+import { colorizeRequest } from "./request_color";
 
 export const logger = pino({
   level: config.logLevel,
@@ -26,10 +27,10 @@ export const pinoHttpLogger = pinoHttp({
     return "info";
   },
   customSuccessMessage: (req, res) => {
-    return `${req.method} ${req.url} completed - status ${res.statusCode}`;
+    return `${colorizeRequest(req.method)} ${req.url} ${res.statusCode}`;
   },
   customErrorMessage: (req, res, err) => {
-    return `Request ${req.method} ${req.url} failed - status ${res.statusCode}: ${err.message}`;
+    return `${colorizeRequest(req.method)} ${req.url} failed - status ${res.statusCode}: ${err.message}`;
   },
   serializers: {
     req: () => undefined,

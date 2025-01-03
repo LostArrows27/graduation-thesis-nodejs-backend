@@ -10,6 +10,7 @@ const relatedImage = (image: ImageMetaData) => {
   return false;
 };
 
+// TODO: fake fetch user images
 export async function fetchRenderImage() {
   const { data, error } = await supabase.from("image_meta_data").select("*");
 

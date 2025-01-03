@@ -4,6 +4,7 @@ import { AuthUserRequest } from "../types/app.type";
 import { redisClient } from "../configs/redis";
 import { logger } from "../helpers/logging/logger";
 import { checkVideoParamsMiddelware } from "../middlewares/check_video_params_middleware";
+import chalk from "chalk";
 
 const videoRouter = express.Router();
 
@@ -51,8 +52,8 @@ videoRouter.post(
       redisClient.hSet(`render:user-${userId}`, "status", "rendering"),
       redisClient.set(`video:user-${userId}:render-${renderQueueId}`, "start"),
     ]);
-    logger.warn(
-      `User "${user.email?.split("@")[0]}" video has started rendering`
+    logger.info(
+      `User ${chalk.blue(user.email?.split("@")[0])} video has started rendering`
     );
 
     res.json({

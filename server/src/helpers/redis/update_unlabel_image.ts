@@ -1,31 +1,28 @@
 import { redisClient } from "../../configs/redis";
 import { ImageMetaData } from "../../types/database.type";
+import { fetchRenderImage } from "../fakers/fetch_render_image";
 import { logger } from "../logging/logger";
-import { pushToStream } from "./redis_service";
+import { pushToStream } from "./redis_function_service";
 
-export const divideArray = (imagesMetaData: ImageMetaData[]) => {
-  return {
-    unlabelImages: filterUnlabelImages(imagesMetaData),
-    relateImages: filterRelateImages(imagesMetaData),
-  };
-};
+// Main function
+export const fetchAndUpdateUnlabelImage = async () => {
+  // Fake fetch user images
+  const imagesMetaData = await fetchRenderImage();
 
-export const filterUnlabelImages = (imagesMetaData: ImageMetaData[]) => {
-  return imagesMetaData.filter(
-    (image) => image.labels === undefined || image.labels === null
+  const { unlabelImages, relateImages } = groupByLabelStatus(imagesMetaData);
+
+  await addUnlabelImageToRedisStream(unlabelImages);
+
+  const imageLabled = await waitForImageLabelingJobDone(
+    unlabelImages.map((image) => String(image.id))
   );
+
+  return [...imageLabled, ...relateImages];
 };
 
-export const filterRelateImages = (imagesMetaData: ImageMetaData[]) => {
-  return imagesMetaData.filter(
-    (image) =>
-      image.labels !== undefined &&
-      image.labels !== null &&
-      image.labels.action_labels.length > 0
-  );
-};
-
-export const updateUnlabelImage = async (imagesMetaData: ImageMetaData[]) => {
+export const addUnlabelImageToRedisStream = async (
+  imagesMetaData: ImageMetaData[]
+) => {
   await Promise.all(
     imagesMetaData.map(async (image) => {
       const { id, image_bucket_id, image_name } = image;
@@ -44,7 +41,7 @@ export const updateUnlabelImage = async (imagesMetaData: ImageMetaData[]) => {
   );
 };
 
-export async function waitForLabeledImages(
+export async function waitForImageLabelingJobDone(
   imageIds: string[]
 ): Promise<ImageMetaData[]> {
   const pendingImages = new Set(imageIds);
@@ -114,3 +111,26 @@ export async function waitForLabeledImages(
 
   return Object.values(labeledImages);
 }
+
+// Utils
+export const groupByLabelStatus = (imagesMetaData: ImageMetaData[]) => {
+  return {
+    unlabelImages: filterUnlabelImages(imagesMetaData),
+    relateImages: filterRelateImages(imagesMetaData),
+  };
+};
+
+export const filterUnlabelImages = (imagesMetaData: ImageMetaData[]) => {
+  return imagesMetaData.filter(
+    (image) => image.labels === undefined || image.labels === null
+  );
+};
+
+export const filterRelateImages = (imagesMetaData: ImageMetaData[]) => {
+  return imagesMetaData.filter(
+    (image) =>
+      image.labels !== undefined &&
+      image.labels !== null &&
+      image.labels.action_labels.length > 0
+  );
+};

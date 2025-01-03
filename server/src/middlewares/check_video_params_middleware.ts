@@ -2,6 +2,7 @@ import { Response, NextFunction } from "express";
 import { AuthUserRequest } from "../types/app.type";
 import supabase from "../configs/supabase";
 import { logger } from "../helpers/logging/logger";
+import chalk from "chalk";
 
 // check video render route params
 export const checkVideoParamsMiddelware = async (
@@ -28,7 +29,7 @@ export const checkVideoParamsMiddelware = async (
   }
 
   logger.info(
-    `User "${req.body.user.email?.split("@")[0]}" request create video`
+    `User ${chalk.blue(req.body.user.email?.split("@")[0])} request create video`
   );
 
   next();
