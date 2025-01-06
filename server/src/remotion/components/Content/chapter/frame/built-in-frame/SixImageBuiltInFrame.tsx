@@ -26,7 +26,7 @@ const SixImageBuiltInFrame = ({
         in: inTiming,
         out: outTiming,
       },
-      durationInFrames,
+      durationInFrames
     );
 
   const { moveInLeft1, moveInLeft2, starOpacity } =
@@ -35,7 +35,7 @@ const SixImageBuiltInFrame = ({
       out: outTiming,
     });
 
-  const imagesPath = useMemoAssetArray(videoFrame.slice(0, 6));
+  const imagesPath = videoFrame.slice(0, 6);
 
   return (
     <BuiltInLayout bg="dark">
@@ -72,7 +72,7 @@ const ImageLayerSix = memo(
   ({ images, moveUp, moveDown, opacity, scale }: ImageLayerSixProps) => {
     const [markPath, twoFramePath] = useMemoAssetArray(
       ["mark.png", "2 frame V.png"],
-      builtInPath,
+      builtInPath
     );
 
     return (
@@ -153,7 +153,7 @@ const ImageLayerSix = memo(
         </div>
       </AbsoluteFill>
     );
-  },
+  }
 );
 
 type AssetLayerSixProps = {
@@ -164,7 +164,7 @@ type AssetLayerSixProps = {
 const AssetLayerSix = memo(({ starOpacity, opacity }: AssetLayerSixProps) => {
   const [starFewPath, starManyPath, tapePath, notePath] = useMemoAssetArray(
     ["star_few.gif", "star_many.gif", "tape.png", "note.png"],
-    builtInPath,
+    builtInPath
   );
 
   return (
@@ -286,7 +286,7 @@ const ImageLayerSecondSix = memo(
         </AbsoluteFill>
       </>
     );
-  },
+  }
 );
 
 export default memo(SixImageBuiltInFrame);

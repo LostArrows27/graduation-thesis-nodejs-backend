@@ -13,14 +13,7 @@ const FrameMapping = ({
 }: FrameMappingProps) => {
   // NOTE: add dev dep if error:))
   const processedFrame = useMemo(() => {
-    const processedImages = frame.images.map((image) => ({
-      ...image,
-      path: image.path.replace(
-        "D:/Code Space/AI/image_classification/model/image",
-        "/images",
-      ),
-    }));
-    return processedImages.map((image) => image.path);
+    return frame.images.map((image) => image.path);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -3,6 +3,8 @@ import { Cloudinary } from "@cloudinary/url-gen";
 import { fill } from "@cloudinary/url-gen/actions/resize";
 import { quality, format } from "@cloudinary/url-gen/actions/delivery";
 import { scale } from "@cloudinary/url-gen/actions/resize";
+import { logger } from "../../helpers/logging/logger";
+import cloudinaryInstance from "./cloudinary";
 
 export const uploadAndResizeImages = async (imageArray: string[]) => {
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME as string;
@@ -22,7 +24,7 @@ export const uploadAndResizeImages = async (imageArray: string[]) => {
 
       const uploadResponse = await axios.post(
         `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-        formData,
+        formData
       );
 
       const publicId = uploadResponse.data.public_id;
@@ -45,9 +47,9 @@ export const uploadAndResizeImages = async (imageArray: string[]) => {
 export const reduceImageSize = (
   imageUrls: string[],
   maxWidth = 800,
-  qualityPercentage = 80,
+  qualityPercentage = 80
 ) => {
-  const cloudName = "dkc9yplyv";
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME as string;
 
   const cld = new Cloudinary({
     cloud: {
@@ -57,7 +59,7 @@ export const reduceImageSize = (
 
   const transformedUrls = imageUrls.map((url) => {
     const publicIdMatch = url.match(
-      /https:\/\/res.cloudinary.com\/dkc9yplyv\/image\/upload\/v[0-9]+\/(.+)$/,
+      /https:\/\/res.cloudinary.com\/dkc9yplyv\/image\/upload\/v[0-9]+\/(.+)$/
     );
 
     if (!publicIdMatch || !publicIdMatch[1]) {
@@ -80,6 +82,33 @@ export const reduceImageSize = (
   return transformedUrls;
 };
 
+const extractPublicId = (url: string) => {
+  const cleanUrl = url.split("?")[0].split("#")[0];
+  // eslint-disable-next-line no-useless-escape
+  const regex = /\/upload\/[^\/]+\/([^\/?#]+)/;
+
+  const match = cleanUrl.match(regex);
+
+  return match ? match[1] : null;
+};
+
+export const deleteImagesByUrl = async (imageUrls: string[]) => {
+  try {
+    const publicIds = imageUrls
+      .map(extractPublicId)
+      .filter((id) => id !== null) as string[];
+
+    const deletePromises = publicIds.map((publicId) =>
+      cloudinaryInstance.uploader.destroy(publicId)
+    );
+
+    await Promise.all(deletePromises);
+  } catch (error) {
+    logger.error("Error deleting images:", error);
+    throw error;
+  }
+};
+
 // const resizeURL = [
 //   "https://res.cloudinary.com/dkc9yplyv/image/upload/v1735035353/IMG_1707991194971_1730885655265_dpztbg.jpg",
 // ];
@@ -87,3 +116,9 @@ export const reduceImageSize = (
 // const resizedImages = reduceImageSize(resizeURL);
 
 // console.log(resizedImages);
+
+// const deleteURL = [
+//   "https://res.cloudinary.com/dkc9yplyv/image/upload/ar_10:7,c_fill,w_384/jp6w0onx8whqcdzt3ora?_a=DATAg1OYZAA0",
+// ];
+
+// deleteImagesByUrl(deleteURL);

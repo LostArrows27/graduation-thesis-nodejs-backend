@@ -2,7 +2,7 @@ import { random } from "remotion";
 import { ChapterWithDuration } from "../types/frame.type";
 
 export function chooseRandomOutroImage(
-  chaptersWithDuration: ChapterWithDuration[],
+  chaptersWithDuration: ChapterWithDuration[]
 ): string[] {
   const allImagePaths: string[] = [];
 
@@ -14,9 +14,7 @@ export function chooseRandomOutroImage(
     });
   });
 
-  const shuffledPaths = allImagePaths.sort(
-    () => 0.5 - random(JSON.stringify(chaptersWithDuration)),
-  );
+  const shuffledPaths = allImagePaths.sort(() => 0.5 - random(null));
 
   return shuffledPaths.slice(0, 5);
 }

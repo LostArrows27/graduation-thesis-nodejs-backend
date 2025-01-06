@@ -5,7 +5,7 @@ export const colorizeRequest = (method: string | undefined): string => {
     case "GET":
       return chalk.bgGreen.white(` ${method} `);
     case "POST":
-      return chalk.bgYellow.white(` ${method} `);
+      return chalk.bgHex("#f97316").white(` ${method} `);
     case "PUT":
       return chalk.bgBlue.white(` ${method} `);
     case "DELETE":

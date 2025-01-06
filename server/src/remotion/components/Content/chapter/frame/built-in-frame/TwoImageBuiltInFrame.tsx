@@ -6,7 +6,6 @@ import {
   useTwoImageBuiltInFrameAnimation,
 } from "../../../../../hooks/built-in-frame-animation/use-built-in-image-frame-animation";
 import AssetLayerTwo from "./two-image/AssetLayerTwo";
-import { useMemoAssetArray } from "../../../../../hooks/use-memo-asset-path";
 import ImageLayerTwo from "./two-image/ImageLayerTwo";
 import { memo } from "react";
 
@@ -24,7 +23,7 @@ const TwoImageBuiltInFrame = ({
         in: inTiming,
         out: outTiming,
       },
-      durationInFrames,
+      durationInFrames
     );
 
   const { moveUpNote, scale } = useTwoImageBuiltInFrameAnimation(
@@ -32,10 +31,8 @@ const TwoImageBuiltInFrame = ({
       in: inTiming,
       out: outTiming,
     },
-    durationInFrames,
+    durationInFrames
   );
-
-  const [image1, image2] = useMemoAssetArray([images[0], images[1]]);
 
   return (
     <BuiltInLayout bg="dark">
@@ -45,8 +42,8 @@ const TwoImageBuiltInFrame = ({
           moveInImage={moveInImage}
           moveInImage2={moveInImage2}
           scale={scale}
-          image1={image1}
-          image2={image2}
+          image1={images[0]}
+          image2={images[1]}
         />
         {/* asset layer */}
         <AssetLayerTwo

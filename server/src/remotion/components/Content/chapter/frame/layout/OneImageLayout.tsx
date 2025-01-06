@@ -2,7 +2,6 @@ import { AbsoluteFill, Img } from "remotion";
 import { NormalImageProps } from "../../../../../types/content.type";
 import { Layout } from "./NormalImageLayout";
 import { useOneImageFrameAnimation } from "../../../../../hooks/frame-animation/use-image-frame-animation";
-import { useMemoAssetPath } from "../../../../../hooks/use-memo-asset-path";
 import { memo } from "react";
 
 export const OneImageLayout = memo(
@@ -15,14 +14,14 @@ export const OneImageLayout = memo(
   }: NormalImageProps) => {
     // NOTE: simulation 1 images
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const imagePath = useMemoAssetPath(videoFrame[0]);
+    const imagePath = videoFrame[0];
 
     const { position: left, scale } = useOneImageFrameAnimation(
       {
         in: inTiming,
         out: outTiming,
       },
-      durationInFrames,
+      durationInFrames
     );
 
     return (
@@ -45,5 +44,5 @@ export const OneImageLayout = memo(
         </AbsoluteFill>
       </Layout>
     );
-  },
+  }
 );

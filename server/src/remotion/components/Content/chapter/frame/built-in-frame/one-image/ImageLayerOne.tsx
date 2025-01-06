@@ -1,7 +1,6 @@
 import { AbsoluteFill, Img } from "remotion";
 import { loadFont } from "@remotion/google-fonts/Itim";
 import { memo } from "react";
-import { useMemoAssetPath } from "../../../../../../hooks/use-memo-asset-path";
 
 const { fontFamily } = loadFont();
 
@@ -18,8 +17,6 @@ const ImageLayerOne = ({
   scale,
   images,
 }: ImageLayerProps) => {
-  const imagePath = useMemoAssetPath(images[0]);
-
   return (
     <AbsoluteFill>
       <div
@@ -52,7 +49,7 @@ const ImageLayerOne = ({
               transform: `scale(${scale})`,
             }}
             className="object-cover object-center w-full h-full"
-            src={imagePath}
+            src={images[0]}
           />
         </div>
       </div>

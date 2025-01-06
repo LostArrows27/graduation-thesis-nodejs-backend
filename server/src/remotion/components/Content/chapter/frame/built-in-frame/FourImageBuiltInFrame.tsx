@@ -26,7 +26,7 @@ const FourImageBuiltInFrame = ({
         in: inTiming,
         out: outTiming,
       },
-      durationInFrames,
+      durationInFrames
     );
 
   const { rotate, moveInLeft } = useFourImageBuiltInFrameAnimation({
@@ -34,7 +34,7 @@ const FourImageBuiltInFrame = ({
     out: outTiming,
   });
 
-  const imagesPath = useMemoAssetArray(videoFrame.slice(0, 4));
+  const imagesPath = videoFrame.slice(0, 4);
 
   return (
     <BuiltInLayout bg="light" imageNumber={4}>
@@ -77,7 +77,7 @@ const ImageLayerFour = memo(
   }: ImageLayerFourProps) => {
     const [framePath, starFewPath, starManyPath] = useMemoAssetArray(
       ["3 frame H.png", "star_few.gif", "star_many.gif"],
-      builtInPath,
+      builtInPath
     );
 
     return (
@@ -136,7 +136,7 @@ const ImageLayerFour = memo(
         </div>
       </AbsoluteFill>
     );
-  },
+  }
 );
 
 type AssetLayerFourProps = {
@@ -147,7 +147,7 @@ type AssetLayerFourProps = {
 const AsssetLayerFour = memo(({ moveUpNote, goDown }: AssetLayerFourProps) => {
   const [paperPath, tape2Path, wowPath, tapePath, notePath] = useMemoAssetArray(
     ["paper_2.png", "tape_2.png", "wow.gif", "tape.png", "note.png"],
-    builtInPath,
+    builtInPath
   );
 
   return (
@@ -224,7 +224,7 @@ const ForthImageLayerFour = memo(
   ({ moveInLeft, rotate, scale, image }: ForthImageLayerFourProps) => {
     const [framePath, paperPath] = useMemoAssetArray(
       ["1 frame white V.png", "paper_1.png"],
-      builtInPath,
+      builtInPath
     );
 
     return (
@@ -263,7 +263,7 @@ const ForthImageLayerFour = memo(
         </AbsoluteFill>
       </>
     );
-  },
+  }
 );
 
 export default memo(FourImageBuiltInFrame);

@@ -15,6 +15,15 @@ videoRouter.post(
   checkAccessToken,
   checkVideoParamsMiddelware,
   async (req: AuthUserRequest, res: Response) => {
+    // */
+    // await renderVideo(imageGroupJSON);
+
+    // res.json({
+    //   message: "Video has started rendering. Please wait.",
+    // });
+
+    // await renderVideo();
+
     // Check if video has already been created
     const { user, renderQueueId } = req.body;
 
@@ -27,7 +36,7 @@ videoRouter.post(
     if (videoLink && videoLink !== "start" && videoLink !== "rendering") {
       res.status(200).json({
         message: "Video has already been created.",
-        url: videoLink,
+        url: videoLink.split(", "),
       });
       return;
     }

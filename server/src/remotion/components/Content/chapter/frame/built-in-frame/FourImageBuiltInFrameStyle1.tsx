@@ -23,10 +23,10 @@ const FourImageBuiltInFrameStyle1 = ({
         in: inTiming,
         out: outTiming,
       },
-      durationInFrames,
+      durationInFrames
     );
 
-  const imagesPath = useMemoAssetArray(videoFrame.slice(0, 4));
+  const imagesPath = videoFrame.slice(0, 4);
 
   return (
     <BuiltInLayout bg="dark">
@@ -59,7 +59,7 @@ const ImageLayerFourStyle1 = memo(
   ({ images, moveUp, moveDown, opacity, scale }: ImageLayerFourStyle1Props) => {
     const [markPath, twoFramePath] = useMemoAssetArray(
       ["mark.png", "2 frame V.png"],
-      builtInPath,
+      builtInPath
     );
 
     return (
@@ -140,7 +140,7 @@ const ImageLayerFourStyle1 = memo(
         </div>
       </AbsoluteFill>
     );
-  },
+  }
 );
 
 type AssetLayerFourStyle1Props = {
@@ -152,7 +152,7 @@ const AssetLayerFourStyle1 = memo(
   ({ appearFromLeft, starOpacity }: AssetLayerFourStyle1Props) => {
     const [tapePath, notePath, starFewPath, starManyPath] = useMemoAssetArray(
       ["tape.png", "note.png", "star_few.gif", "star_many.gif"],
-      builtInPath,
+      builtInPath
     );
 
     return (
@@ -217,7 +217,7 @@ const AssetLayerFourStyle1 = memo(
         </AbsoluteFill>
       </>
     );
-  },
+  }
 );
 
 export default memo(FourImageBuiltInFrameStyle1);

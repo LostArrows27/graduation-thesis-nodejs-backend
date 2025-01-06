@@ -1,7 +1,6 @@
 import { BuiltInTransitionProps } from "../../../../../types/content.type";
 import BuiltInLayout from "./BuiltInLayout";
 import { useThreeImageBuiltInFrameAnimation } from "../../../../../hooks/built-in-frame-animation/use-built-in-image-frame-animation";
-import { useMemoAssetArray } from "../../../../../hooks/use-memo-asset-path";
 import ImageLayerThree from "./three-image/ImageLayerThree";
 import AssetLayerThree from "./three-image/AssetLayerThree";
 import { memo } from "react";
@@ -18,10 +17,10 @@ const ThreeImageBuiltInFrame = ({
         in: inTiming,
         out: outTiming,
       },
-      durationInFrames,
+      durationInFrames
     );
 
-  const imagePath = useMemoAssetArray(videoFrame.slice(0, 3));
+  const imagePath = videoFrame.slice(0, 3);
 
   return (
     <BuiltInLayout bg="dark">

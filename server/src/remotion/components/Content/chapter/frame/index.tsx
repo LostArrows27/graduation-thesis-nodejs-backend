@@ -49,18 +49,6 @@ const ChapterFrame = ({
     lastChapterAdditionalTime +
     (index === frames.length - 1 ? 0 : FRAME_TRANSITION_TIME);
 
-  const imagesNews = frame.images.map((image) => {
-    return {
-      ...image,
-      path: image.path.replace(
-        "D:/Code Space/AI/image_classification/model/image",
-        "/images",
-      ),
-    };
-  });
-
-  frame.images = imagesNews;
-
   return (
     <Fragment key={index}>
       <TransitionSeries.Sequence durationInFrames={frameTotalDuration}>

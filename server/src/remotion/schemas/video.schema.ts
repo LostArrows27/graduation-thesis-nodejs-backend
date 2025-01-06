@@ -36,6 +36,7 @@ export const introSceneSchema = z.object({
 });
 
 export const compositionSchema = z.object({
+  type: z.enum(["dev", "prod"]),
   contentLength: z.number(),
   videoDate: z.date(),
   introScene: introSceneSchema,

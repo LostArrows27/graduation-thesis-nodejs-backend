@@ -2,7 +2,6 @@ import { AbsoluteFill, Img } from "remotion";
 import { NormalImageProps } from "../../../../../types/content.type";
 import { Layout } from "./NormalImageLayout";
 import { useTwoImageFrameAnimation } from "../../../../../hooks/frame-animation/use-image-frame-animation";
-import { useMemoAssetArray } from "../../../../../hooks/use-memo-asset-path";
 import { memo } from "react";
 
 const TwoImageLayout = ({
@@ -13,14 +12,14 @@ const TwoImageLayout = ({
   durationInFrames,
 }: NormalImageProps) => {
   // NOTE: similation 2 images
-  const [image1, image2] = useMemoAssetArray([videoFrame[0], videoFrame[1]]);
+  const [image1, image2] = [videoFrame[0], videoFrame[1]];
 
   const { position, scale } = useTwoImageFrameAnimation(
     {
       in: inTiming,
       out: outTiming,
     },
-    durationInFrames,
+    durationInFrames
   );
 
   return (

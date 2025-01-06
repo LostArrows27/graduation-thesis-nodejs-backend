@@ -8,6 +8,7 @@ import {
 import {
   INTRO_SCENE_LENGTH,
   OUTRO_SCENE_LENGTH,
+  VIDEO_COMPOSITION_ID,
   VIDEO_FPS,
   VIDEO_HEIGHT,
   VIDEO_WIDTH,
@@ -23,10 +24,7 @@ import { getVideoMetadata } from "@remotion/media-utils";
 import { calculateVideoDuration } from "./utils/calculate-video-timeline";
 import { chooseRandomOutroImage } from "./utils/choose-random-outro-image";
 import { chooseRandomOutroCaption } from "./utils/choose-random-outro-caption";
-// import { uploadAndResizeImages } from "./utils/transform-image-size";
-import { videoProps } from "./constants/video-props";
-
-// TODO: read input from nodejs -> parse in
+import { generateDefaultVideoProps } from "./constants/video-props";
 
 // TODO: upload image to cloudinary -> resize -> finish delete
 
@@ -36,7 +34,7 @@ const calculateMetadata: CalculateMetadataFunction<MainProps> = async ({
 }) => {
   const bgMusic = chooseIntroMusic();
   const bgVideoSrc = staticFile(
-    getRandomAssetByDate(props.videoDate, "videos"),
+    getRandomAssetByDate(props.videoDate, "videos")
   );
   const title = chooseIntroTitle(props.videoDate);
   const captions = chooseRandomCaption();
@@ -47,7 +45,7 @@ const calculateMetadata: CalculateMetadataFunction<MainProps> = async ({
     throw new Error("Cannot get video metadata");
   }
 
-  const videoContentDuration = calculateVideoDuration(props.contentScene); // NOTE: parse images JSON laters using NodeJS
+  const videoContentDuration = calculateVideoDuration(props.contentScene);
 
   const outroImage = chooseRandomOutroImage(props.contentScene); // TODO: choose group image with max members instead
 
@@ -57,12 +55,6 @@ const calculateMetadata: CalculateMetadataFunction<MainProps> = async ({
     INTRO_SCENE_LENGTH + videoContentDuration + OUTRO_SCENE_LENGTH;
 
   const titleStyle = Math.floor(random(null) * 2);
-
-  // const imageURL = await uploadAndResizeImages(
-  //   props.introScene.secondScene.images,
-  // );
-
-  // props.introScene.secondScene.images = imageURL;
 
   props.bgMusic = bgMusic;
   props.bgVideo.src = bgVideoSrc;
@@ -86,14 +78,14 @@ export const RemotionRoot: React.FC = () => {
     <>
       <Composition
         component={MainVideo}
-        id="MainVideo"
+        id={VIDEO_COMPOSITION_ID}
         durationInFrames={200}
         fps={VIDEO_FPS}
         schema={compositionSchema}
         width={VIDEO_WIDTH}
         height={VIDEO_HEIGHT}
         calculateMetadata={calculateMetadata}
-        defaultProps={videoProps(new Date("2024-04-02"))}
+        defaultProps={generateDefaultVideoProps(new Date("2024-04-02"))}
       />
     </>
   );

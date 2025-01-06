@@ -1,4 +1,4 @@
-import { Img, staticFile } from "remotion";
+import { Img } from "remotion";
 import { AbsoluteFill } from "remotion";
 import { ChapterStyleProps } from "../../../../types/content.type";
 import { loadFont as loadSubFont } from "@remotion/google-fonts/DancingScript";
@@ -14,26 +14,12 @@ const { fontFamily: subFontFamily } = loadSubFont();
 const { fontFamily: titleFontFamily } = loadTitleFont();
 
 const BeigeStyleTitle = ({ images, index, title }: ChapterStyleProps) => {
-  // TODO: remove local file later
-  const newImageURL = useMemo(
-    () =>
-      images.map((image) =>
-        staticFile(
-          image.replace(
-            "D:/Code Space/AI/image_classification/model/image",
-            "/images",
-          ),
-        ),
-      ),
-    [images],
-  );
-
   const locationTitleNote = useMemo(
     () =>
       chooseLocationTitleNote(
-        `index-${index}-title-${title}-image-${JSON.stringify(images)}`,
+        `index-${index}-title-${title}-image-${JSON.stringify(images)}`
       ),
-    [images, index, title],
+    [images, index, title]
   );
 
   const [
@@ -54,7 +40,7 @@ const BeigeStyleTitle = ({ images, index, title }: ChapterStyleProps) => {
       "tape.png",
       "frame_h.png",
     ],
-    "/images/content/title_2/",
+    "/images/content/title_2/"
   );
 
   return (
@@ -111,7 +97,7 @@ const BeigeStyleTitle = ({ images, index, title }: ChapterStyleProps) => {
           <div className="w-[300px] h-[350.877px] absolute right-[35%] top-[18%]">
             <Img
               className="object-cover object-center w-full h-full"
-              src={newImageURL[0]}
+              src={images[0]}
             />
             <Img
               className="!w-[320px] -top-1 absolute h-[370px] max-h-[370px] -left-1 max-w-[320px]"
@@ -128,7 +114,7 @@ const BeigeStyleTitle = ({ images, index, title }: ChapterStyleProps) => {
               />
               <Img
                 className="object-cover object-center w-full h-full"
-                src={newImageURL[1]}
+                src={images[1]}
               />
               <Img
                 className="absolute -bottom-[55px] w-[60px] -right-6 h-auto"

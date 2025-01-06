@@ -32,7 +32,7 @@ import { generateVideoContent } from "./generate-video-content";
     - remove -> (n-1) * b
 */
 export const calculateVideoTimeline = (
-  imageData: ImageJSON,
+  imageData: ImageJSON
 ): ChapterWithDuration[] => {
   const chapters = generateVideoContent(imageData);
 
@@ -40,13 +40,13 @@ export const calculateVideoTimeline = (
   const newChapters = chapters.map((chapter, index) => {
     const framesTotalDuration = calculateTotalFrameDuration(
       chapter.frame,
-      chapter.transition,
+      chapter.transition
     );
 
     const chapterTotalDuration = calculateChapterDuration(
       framesTotalDuration,
       index,
-      chapters.length,
+      chapters.length
     );
 
     return {
@@ -61,7 +61,7 @@ export const calculateVideoTimeline = (
 export const calculateVideoDuration = (chapters: ChapterWithDuration[]) => {
   const totalChapterDuration = chapters.reduce(
     (acc, chapter) => acc + chapter.durationInFrames,
-    0,
+    0
   );
 
   const totalDuration =
@@ -73,7 +73,7 @@ export const calculateVideoDuration = (chapters: ChapterWithDuration[]) => {
 export const calculateChapterDuration = (
   framesTotalDuration: number,
   index: number,
-  total: number,
+  total: number
 ) => {
   // NOTE: every chap have in + out transition
   //       -> add chap trans time at begin + end of chap
@@ -96,7 +96,7 @@ export const calculateChapterDuration = (
 
 export const calculateTotalFrameDuration = (
   frames: Frame[],
-  chapterTransitionType: Transition,
+  chapterTransitionType: Transition
 ) => {
   const chapterTotalFrameDuration =
     frames.reduce((acc, frame, frameIndex) => {
@@ -106,7 +106,7 @@ export const calculateTotalFrameDuration = (
           frame,
           frameIndex,
           frames.length,
-          chapterTransitionType,
+          chapterTransitionType
         )
       );
     }, 0) -
@@ -119,7 +119,7 @@ export const calculateFrameDuration = (
   frame: Frame,
   index: number,
   total: number,
-  chapterTransitionType: Transition,
+  chapterTransitionType: Transition
 ) => {
   if (total === 1 && frame.type === "single") {
     if (chapterTransitionType.type === "self-built") {

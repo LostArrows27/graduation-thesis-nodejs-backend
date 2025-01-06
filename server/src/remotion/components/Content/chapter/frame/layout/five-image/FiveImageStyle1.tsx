@@ -2,7 +2,6 @@ import { AbsoluteFill, Img } from "remotion";
 import { NormalImageProps } from "../../../../../../types/content.type";
 import { Layout } from "../NormalImageLayout";
 import { useFiveImageFrameAnimationStyle1 } from "../../../../../../hooks/frame-animation/use-image-frame-animation";
-import { useMemoAssetArray } from "../../../../../../hooks/use-memo-asset-path";
 import { memo } from "react";
 
 const FiveImageStyle1 = ({
@@ -13,7 +12,7 @@ const FiveImageStyle1 = ({
   chapterIndex,
   durationInFrames,
 }: NormalImageProps) => {
-  const imagePath = useMemoAssetArray(videoFrame.slice(0, 5));
+  const imagePath = videoFrame.slice(0, 5);
 
   const { positionFirstCol, positionSecondCol, positionThirdCol, scale } =
     useFiveImageFrameAnimationStyle1(
@@ -21,7 +20,7 @@ const FiveImageStyle1 = ({
         in: inTiming,
         out: outTiming,
       },
-      durationInFrames,
+      durationInFrames
     );
 
   return (

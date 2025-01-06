@@ -2,7 +2,6 @@ import { AbsoluteFill, Img } from "remotion";
 import { NormalImageProps } from "../../../../../../types/content.type";
 import { Layout } from "../NormalImageLayout";
 import { useFourImageFrameAnimationStyle3 } from "../../../../../../hooks/frame-animation/use-image-frame-animation";
-import { useMemoAssetArray } from "../../../../../../hooks/use-memo-asset-path";
 import { memo } from "react";
 
 const FourImageStyle3 = ({
@@ -13,7 +12,7 @@ const FourImageStyle3 = ({
   durationInFrames,
   frameIndex,
 }: NormalImageProps) => {
-  const imagePath = useMemoAssetArray(videoFrame.slice(0, 4));
+  const imagePath = videoFrame.slice(0, 4);
 
   const {
     positionFirstRow,
@@ -27,7 +26,7 @@ const FourImageStyle3 = ({
       out: outTiming,
     },
     durationInFrames,
-    `random-animation--JSON-${JSON.stringify(videoFrame)}-chapter-${chapterIndex}-frame-${frameIndex}}`,
+    `random-animation--JSON-${JSON.stringify(videoFrame)}-chapter-${chapterIndex}-frame-${frameIndex}}`
   );
 
   return (

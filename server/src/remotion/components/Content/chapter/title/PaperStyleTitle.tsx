@@ -1,4 +1,4 @@
-import { AbsoluteFill, Img, staticFile } from "remotion";
+import { AbsoluteFill, Img } from "remotion";
 import { ChapterStyleProps } from "../../../../types/content.type";
 import { loadFont } from "@remotion/google-fonts/AmaticSC";
 import { loadFont as loadTitleFont } from "@remotion/google-fonts/Itim";
@@ -13,21 +13,6 @@ const { fontFamily } = loadFont();
 const { fontFamily: titleFontFamily } = loadTitleFont();
 
 const PaperStyleTitle = ({ images, index, title }: ChapterStyleProps) => {
-  // TODO: remove local file later
-
-  const newImageURL = useMemo(
-    () =>
-      images.map((image) =>
-        staticFile(
-          image.replace(
-            "D:/Code Space/AI/image_classification/model/image",
-            "/images",
-          ),
-        ),
-      )[1],
-    [images],
-  );
-
   const [
     screenPath,
     arrowPath,
@@ -44,15 +29,15 @@ const PaperStyleTitle = ({ images, index, title }: ChapterStyleProps) => {
       "tape.png",
       "paper.png",
     ],
-    "/images/content/title/",
+    "/images/content/title/"
   );
 
   const locationTitleNote = useMemo(
     () =>
       chooseLocationTitleNote(
-        `title-${title}-index-${index}-image-${JSON.stringify(images)}`,
+        `title-${title}-index-${index}-image-${JSON.stringify(images)}`
       ),
-    [images, index, title],
+    [images, index, title]
   );
 
   return (
@@ -103,7 +88,7 @@ const PaperStyleTitle = ({ images, index, title }: ChapterStyleProps) => {
           />
           <Img
             className="absolute z-0 object-cover object-center w-full h-full"
-            src={newImageURL}
+            src={images[1]}
           />
           <Img
             src={tapePath}

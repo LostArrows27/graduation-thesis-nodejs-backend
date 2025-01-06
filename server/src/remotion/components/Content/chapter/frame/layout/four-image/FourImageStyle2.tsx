@@ -3,7 +3,6 @@ import { AbsoluteFill } from "remotion";
 import { NormalImageProps } from "../../../../../../types/content.type";
 import { Layout } from "../NormalImageLayout";
 import { useFourImageFrameAnimationStyle2 } from "../../../../../../hooks/frame-animation/use-image-frame-animation";
-import { useMemoAssetArray } from "../../../../../../hooks/use-memo-asset-path";
 import { memo } from "react";
 
 const FourImageStyle2 = ({
@@ -13,7 +12,7 @@ const FourImageStyle2 = ({
   chapterIndex,
   durationInFrames,
 }: NormalImageProps) => {
-  const imagePath = useMemoAssetArray(videoFrame.slice(0, 4));
+  const imagePath = videoFrame.slice(0, 4);
 
   const { positionFirstRow, positionSecondRow, positionThirdRow, scale } =
     useFourImageFrameAnimationStyle2(
@@ -21,7 +20,7 @@ const FourImageStyle2 = ({
         in: inTiming,
         out: outTiming,
       },
-      durationInFrames,
+      durationInFrames
     );
 
   return (

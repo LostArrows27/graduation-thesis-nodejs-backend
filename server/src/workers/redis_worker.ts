@@ -2,13 +2,17 @@ import chalk from "chalk";
 import { redisClient, redisWorkerClient } from "../configs/redis";
 import { logger } from "../helpers/logging/logger";
 import { fetchAndUpdateUnlabelImage } from "../helpers/redis/update_unlabel_image";
-import { wait } from "../helpers/timer/wait";
+import { groupImageByLabel } from "../helpers/images/image_grouping";
+import { renderVideo } from "../helpers/remotion/remotion_render";
+import supabase from "../configs/supabase";
 
-// TODO: add un-labeled image logic
-// 1. fetch image from supabase (messageID -> image link -> ....)
-// 2. render image
+// TODO:
+/* WORK WITH REDIS WORKER VIDEO FILE -> NOT THISS FILE !!!!!!!!!!!
+  1. update video render progress to database
+  2. find a way to upload video to supabase -> reference to Github upwrapped 2023
 
-// TODO: add render video logic
+  TODO: if have time -> upload image of content part -> cloudinary
+*/
 
 export const redisWorker = async () => {
   logger.info("Redis Worker start listening to key insert.");
@@ -33,21 +37,48 @@ export const redisWorker = async () => {
       if (videoLinkStatus === "rendering" || videoLinkStatus?.includes("http"))
         return;
 
-      // videoLinkStatus === "start" -> start rendering
-      await redisClient.set(key, "rendering");
-
-      const totalImage = fetchAndUpdateUnlabelImage();
-
-      // fake render video -> using totalImage to render video
-      await wait(5000);
-
+      // videoLinkStatus === "start" -> start rendering video
       await Promise.all([
-        redisClient.del(`render:user-${userId}`),
-        redisClient.set(
-          `video:user-${userId}:render-${renderQueueId}`,
-          "https://video.com"
-        ),
+        redisClient.set(key, "rendering"),
+        supabase
+          .from("video_render")
+          .update({ status: "in_progress", updated_at: new Date() })
+          .eq("id", renderQueueId),
       ]);
+
+      // start rendering video
+      const imageLabeled = await fetchAndUpdateUnlabelImage();
+
+      const imageGroupJSON = groupImageByLabel(imageLabeled);
+
+      try {
+        const chunkURLs = await renderVideo(
+          imageGroupJSON,
+          renderQueueId,
+          userId
+        );
+
+        // end rendering video
+        await Promise.all([
+          redisClient.del(`render:user-${userId}`),
+          redisClient.set(
+            `video:user-${userId}:render-${renderQueueId}`,
+            chunkURLs.join(", ")
+          ),
+        ]);
+      } catch (error: unknown) {
+        logger.error(`Error rendering: ${(error as Error).message}`);
+
+        await supabase
+          .from("video_render")
+          .update({
+            status: "failed",
+            updated_at: new Date(),
+          })
+          .eq("id", renderQueueId);
+
+        return;
+      }
 
       logger.info(`Finish rendering video for ${chalk.blue(`user-${userId}`)}`);
     }

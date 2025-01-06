@@ -3,9 +3,11 @@ import { imageJSON } from "../assets/images";
 import { calculateVideoTimeline } from "../utils/calculate-video-timeline";
 import { VIDEO_FPS } from "./constants";
 import { cloudinaryImage } from "./image";
+import { RenderType } from "../types/video.type";
 
-export const videoProps = (fakeDate: Date) => {
+export const generateDefaultVideoProps = (fakeDate: Date) => {
   return {
+    type: "dev" as RenderType,
     titleStyle: 0,
     contentLength: 60 * VIDEO_FPS,
     videoDate: fakeDate,
@@ -23,7 +25,7 @@ export const videoProps = (fakeDate: Date) => {
         title: "Our Trip Recap",
         time: fakeDate,
         images: Array.from({ length: 4 }, (_, i) => {
-          return `/images/intro/first/first_scene_${i + 1}.jpg`;
+          return staticFile(`/images/intro/first/first_scene_${i + 1}.jpg`);
         }),
       },
       secondScene: {
@@ -36,6 +38,28 @@ export const videoProps = (fakeDate: Date) => {
         // direction: "vertical",
       },
     },
-    contentScene: calculateVideoTimeline(imageJSON),
+    contentScene: calculateVideoTimeline(imageJSON).map(
+      (chapterWithDuration) => {
+        return {
+          ...chapterWithDuration,
+          frame: chapterWithDuration.frame.map((frame) => {
+            return {
+              ...frame,
+              images: frame.images.map((img) => {
+                return {
+                  ...img,
+                  path: staticFile(
+                    img.path.replace(
+                      "D:/Code Space/AI/image_classification/model/image",
+                      "/images"
+                    )
+                  ),
+                };
+              }),
+            };
+          }),
+        };
+      }
+    ),
   };
 };

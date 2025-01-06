@@ -3,6 +3,7 @@ export const VIDEO_WIDTH = 1280;
 export const VIDEO_HEIGHT = 720;
 export const VIDEO_FPS = 30;
 export const AUDIO_VOLUME = 0.7;
+export const VIDEO_COMPOSITION_ID = "MainVideo";
 
 // intro
 export const INTRO_FADE_IN_TIME = 0.8 * VIDEO_FPS;

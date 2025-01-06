@@ -2,7 +2,6 @@ import { AbsoluteFill, Img } from "remotion";
 import { NormalImageProps } from "../../../../../types/content.type";
 import { Layout } from "./NormalImageLayout";
 import { useSixImageFrameAnimationStyle } from "../../../../../hooks/frame-animation/use-image-frame-animation";
-import { useMemoAssetArray } from "../../../../../hooks/use-memo-asset-path";
 import { memo } from "react";
 
 const SixImageLayout = ({
@@ -14,7 +13,7 @@ const SixImageLayout = ({
   durationInFrames,
   frameIndex,
 }: NormalImageProps) => {
-  const imagePath = useMemoAssetArray(videoFrame.slice(0, 6));
+  const imagePath = videoFrame.slice(0, 6);
 
   const {
     positionFirstRow,
@@ -30,7 +29,7 @@ const SixImageLayout = ({
       out: outTiming,
     },
     durationInFrames,
-    `random-animation--JSON-${JSON.stringify(videoFrame)}-chapter-${chapterIndex}-frame-${frameIndex}}`,
+    `random-animation--JSON-${JSON.stringify(videoFrame)}-chapter-${chapterIndex}-frame-${frameIndex}}`
   );
 
   return (

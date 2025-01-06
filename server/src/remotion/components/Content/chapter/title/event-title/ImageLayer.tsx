@@ -1,6 +1,6 @@
-import { AbsoluteFill, Img, staticFile } from "remotion";
+import { AbsoluteFill, Img } from "remotion";
 import { eventAssetPath } from "../../../../../constants/constants";
-import { memo, useMemo } from "react";
+import { memo } from "react";
 import { useImageScaleAnimation } from "../../../../../hooks/use-image-scale-animation";
 import { useMemoAssetPath } from "../../../../../hooks/use-memo-asset-path";
 
@@ -12,19 +12,6 @@ type ImageLayerProps = {
 const ImageLayer = ({ images, duration }: ImageLayerProps) => {
   const scale = useImageScaleAnimation(duration);
 
-  const newImageURL = useMemo(
-    () =>
-      images.map((image) =>
-        staticFile(
-          image.replace(
-            "D:/Code Space/AI/image_classification/model/image",
-            "/images",
-          ),
-        ),
-      ),
-    [images],
-  );
-
   const ghimPath = useMemoAssetPath(eventAssetPath + "ghim.png");
 
   return (
@@ -35,7 +22,7 @@ const ImageLayer = ({ images, duration }: ImageLayerProps) => {
             style={{
               transform: `scale(${scale})`,
             }}
-            src={newImageURL[0]}
+            src={images[0]}
             className="image-fit-full "
           />
         </div>
@@ -50,7 +37,7 @@ const ImageLayer = ({ images, duration }: ImageLayerProps) => {
             style={{
               transform: `scale(${scale})`,
             }}
-            src={newImageURL[1]}
+            src={images[1]}
             className="image-fit-full"
           />
         </div>
@@ -65,7 +52,7 @@ const ImageLayer = ({ images, duration }: ImageLayerProps) => {
             style={{
               transform: `scale(${scale})`,
             }}
-            src={newImageURL[1]}
+            src={images[1]}
             className="image-fit-full "
           />
         </div>

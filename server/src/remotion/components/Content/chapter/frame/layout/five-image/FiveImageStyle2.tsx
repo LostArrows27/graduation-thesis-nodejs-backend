@@ -2,7 +2,6 @@ import { AbsoluteFill, Img } from "remotion";
 import { NormalImageProps } from "../../../../../../types/content.type";
 import { Layout } from "../NormalImageLayout";
 import { useFiveImageFrameAnimationStyle2 } from "../../../../../../hooks/frame-animation/use-image-frame-animation";
-import { useMemoAssetArray } from "../../../../../../hooks/use-memo-asset-path";
 import { memo } from "react";
 
 const FiveImageStyle2 = ({
@@ -13,7 +12,7 @@ const FiveImageStyle2 = ({
   durationInFrames,
   frameIndex,
 }: NormalImageProps) => {
-  const imagePath = useMemoAssetArray(videoFrame.slice(0, 5));
+  const imagePath = videoFrame.slice(0, 5);
 
   const {
     positionFirstEle,
@@ -27,7 +26,7 @@ const FiveImageStyle2 = ({
       out: outTiming,
     },
     durationInFrames,
-    `random-animation--JSON-${JSON.stringify(videoFrame)}-chapter-${chapterIndex}-frame-${frameIndex}}`,
+    `random-animation--JSON-${JSON.stringify(videoFrame)}-chapter-${chapterIndex}-frame-${frameIndex}}`
   );
 
   return (

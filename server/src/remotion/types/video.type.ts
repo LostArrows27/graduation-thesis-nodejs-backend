@@ -18,3 +18,5 @@ export type SecondIntroSceneProps = IntroProps["secondScene"];
 export type OutroProps = {
   data: MainProps["outroScene"];
 };
+
+export type RenderType = MainProps["type"];

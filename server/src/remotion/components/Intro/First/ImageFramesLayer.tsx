@@ -1,4 +1,4 @@
-import { AbsoluteFill, staticFile } from "remotion";
+import { AbsoluteFill } from "remotion";
 import { IMAGE_ROTATION_ANGLE } from "../../../constants/constants";
 import ImageFrame from "../ImageFrame";
 
@@ -15,26 +15,26 @@ const ImageFrameLayer = ({ images }: ImageFrameLayerProps) => {
       <ImageFrame
         animated
         className="-left-24 absolute"
-        url={staticFile(images[0])}
+        url={images[0]}
         rotation={-IMAGE_ROTATION_ANGLE}
       />
       <ImageFrame
         animated
         className="-right-12 -top-12 absolute"
         width={500}
-        url={staticFile(images[1])}
+        url={images[1]}
         rotation={IMAGE_ROTATION_ANGLE}
       />
       <ImageFrame
         animated
         className="-left-12 -bottom-10 absolute"
-        url={staticFile(images[2])}
+        url={images[2]}
         rotation={IMAGE_ROTATION_ANGLE}
       />
       <ImageFrame
         animated
         className="-right-12 -bottom-10 absolute"
-        url={staticFile(images[3])}
+        url={images[3]}
         rotation={-IMAGE_ROTATION_ANGLE}
       />
     </AbsoluteFill>

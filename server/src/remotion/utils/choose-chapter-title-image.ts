@@ -7,12 +7,12 @@ const getRandomImage = (
   images: { path: string; confidence: number }[],
   title: string,
   index: number,
-  titleStyle: number,
+  titleStyle: number
 ): string => {
   const randomIndex = Math.floor(
     random(
-      `random-title-image-title-${title}-index-${index}-titleStyle-${titleStyle}-JSON-${JSON.stringify(images)}`,
-    ) * images.length,
+      `random-title-image-title-${title}-index-${index}-titleStyle-${titleStyle}-JSON-${JSON.stringify(images)}`
+    ) * images.length
   );
   return images[randomIndex].path;
 };
@@ -21,7 +21,7 @@ export const chooseChapterTitleImage = (
   frames: Frame[],
   title: string,
   index: number,
-  titleStyle: number,
+  titleStyle: number
 ): string[] => {
   const imagesWithConfidence: { path: string; confidence: number }[] = [];
 
@@ -43,10 +43,13 @@ export const chooseChapterTitleImage = (
   const highestConfidenceImage = imagesWithConfidence[0];
 
   const remainingImages = imagesWithConfidence.filter(
-    (image) => image !== highestConfidenceImage,
+    (image) => image !== highestConfidenceImage
   );
 
-  const randomImage = getRandomImage(remainingImages, title, index, titleStyle);
+  const randomImage =
+    remainingImages.length === 0
+      ? highestConfidenceImage.path
+      : getRandomImage(remainingImages, title, index, titleStyle);
 
   return [highestConfidenceImage.path, randomImage];
 };
