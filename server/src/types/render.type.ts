@@ -1,6 +1,10 @@
 import { RenderMediaOptions } from "@remotion/renderer";
 import { ChapterWithDuration } from "../remotion/types/frame.type";
-import { RenderType } from "../remotion/types/video.type";
+import {
+  ContentSceneProps,
+  IntroProps,
+  RenderType,
+} from "../remotion/types/video.type";
 
 export type RenderVideoOptions = Omit<
   RenderMediaOptions,
@@ -20,4 +24,16 @@ export type InputPropsType = {
     };
   };
   contentScene: ChapterWithDuration[];
+};
+
+// NOTE: all props that user can modify !
+export type VideoSchema = {
+  type: RenderType;
+  bgMusic: string;
+  introScene: IntroProps;
+  contentScene: ContentSceneProps;
+  outroScene: {
+    images: string[];
+    caption: string[];
+  };
 };

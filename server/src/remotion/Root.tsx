@@ -29,6 +29,12 @@ import { generateDefaultVideoProps } from "./constants/video-props";
 // TODO: upload image to cloudinary -> resize -> finish delete
 
 // NOTE: can random by time render -> more random:))
+
+// NOTE: NEW !!!!!
+/*
+  - past -> generate random based on input props
+  - now -> remove it !
+*/
 const calculateMetadata: CalculateMetadataFunction<MainProps> = async ({
   props,
 }) => {

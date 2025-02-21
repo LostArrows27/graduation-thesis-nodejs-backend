@@ -103,7 +103,7 @@ export const uploadSplittedVideoToSupabase = async (
     .from("video_render")
     .update({
       status: "completed",
-      updated_at: new Date(),
+      updated_at: new Date().toISOString(),
       url: uploadUrls.join(", "),
     })
     .eq("id", renderQueueId);

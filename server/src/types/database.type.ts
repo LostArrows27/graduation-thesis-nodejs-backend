@@ -1,9 +1,7 @@
-export type ImageMetaData = {
-  id: number;
-  message_id?: string;
-  labels?: Labels;
-  image_bucket_id?: string;
-  image_name?: string;
+import { Database } from "../supabase/database.types";
+
+export type ImageMetaData = Database["public"]["Tables"]["image"]["Row"] & {
+  labels: Labels | undefined | null;
 };
 
 export type Labels = {

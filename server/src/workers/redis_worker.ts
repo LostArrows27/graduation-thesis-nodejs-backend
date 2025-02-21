@@ -42,7 +42,10 @@ export const redisWorker = async () => {
         redisClient.set(key, "rendering"),
         supabase
           .from("video_render")
-          .update({ status: "in_progress", updated_at: new Date() })
+          .update({
+            status: "in_progress",
+            updated_at: new Date().toISOString(),
+          })
           .eq("id", renderQueueId),
       ]);
 
@@ -73,7 +76,7 @@ export const redisWorker = async () => {
           .from("video_render")
           .update({
             status: "failed",
-            updated_at: new Date(),
+            updated_at: new Date().toISOString(),
           })
           .eq("id", renderQueueId);
 

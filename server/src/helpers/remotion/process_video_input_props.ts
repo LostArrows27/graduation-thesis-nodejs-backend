@@ -4,6 +4,25 @@ import { uploadAndResizeImages } from "../../remotion/utils/transform-image-size
 import { InputPropsType } from "../../types/render.type";
 import { EXCLUDE_LABELS } from "../constants/constants";
 
+// NOTE: old
+
+export const generateVideoInputSchema = (
+  imageJSON: ImageJSON
+): InputPropsType => {
+  return {
+    type: "prod",
+    introScene: {
+      firstScene: {
+        images: selectIntroFirstSceneImages(imageJSON),
+      },
+      secondScene: {
+        images: selectIntroSecondSceneImages(imageJSON),
+      },
+    },
+    contentScene: calculateVideoTimeline(imageJSON),
+  };
+};
+
 export const processVideoInputProps = async (
   imageJSON: ImageJSON
 ): Promise<InputPropsType> => {
@@ -12,18 +31,11 @@ export const processVideoInputProps = async (
   const secondSceneImageResized =
     await uploadAndResizeImages(secondSceneImages);
 
-  return {
-    type: "prod",
-    introScene: {
-      firstScene: {
-        images: selectIntroFirstSceneImages(imageJSON),
-      },
-      secondScene: {
-        images: secondSceneImageResized,
-      },
-    },
-    contentScene: calculateVideoTimeline(imageJSON),
-  };
+  const videoSchema = generateVideoInputSchema(imageJSON);
+
+  videoSchema.introScene.secondScene.images = secondSceneImageResized;
+
+  return videoSchema;
 };
 
 export const selectIntroFirstSceneImages = (

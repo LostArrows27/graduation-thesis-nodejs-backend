@@ -33,7 +33,7 @@ export const onRenderProgress = async (
       .from("video_render")
       .update({
         progress: currentProgress,
-        updated_at: new Date(),
+        updated_at: new Date().toISOString(),
       })
       .eq("id", renderQueueId);
 

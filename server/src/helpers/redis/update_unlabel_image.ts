@@ -4,6 +4,18 @@ import { fetchRenderImage } from "../fakers/fetch_render_image";
 import { logger } from "../logging/logger";
 import { pushToStream } from "./redis_function_service";
 
+export const categorizedImage = async (images: ImageMetaData[]) => {
+  const { unlabelImages, relateImages } = groupByLabelStatus(images);
+
+  await addUnlabelImageToRedisStream(unlabelImages);
+
+  const imageLabled = await waitForImageLabelingJobDone(
+    unlabelImages.map((image) => String(image.id))
+  );
+
+  return [...imageLabled, ...relateImages];
+};
+
 // Main function
 export const fetchAndUpdateUnlabelImage = async () => {
   // Fake fetch user images
@@ -91,14 +103,22 @@ export async function waitForImageLabelingJobDone(
       try {
         const imageData = await redisClient.hGetAll(`image_job:${imageId}`);
 
-        if (!imageData) return;
+        // if (!imageData) return;
 
         labeledImages[imageId] = {
-          id: parseInt(imageId, 10),
+          id: imageId,
           image_bucket_id: imageData.image_bucket_id,
           image_name: imageData.image_name,
           labels: JSON.parse(imageData.labels),
+          image_features: null,
+          location: null,
+          uploader_id: "uploader_id",
+          album_id: "album_id",
+          updated_at: new Date().toISOString(),
+          created_at: new Date().toISOString(),
         };
+
+        return [];
       } catch (err) {
         logger.error(`Error retrieving data for image ${imageId}:`, err);
       }

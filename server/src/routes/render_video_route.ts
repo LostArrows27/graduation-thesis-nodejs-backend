@@ -1,29 +1,94 @@
 import express, { Response } from "express";
 import { checkAccessToken } from "../middlewares/auth_middleware";
-import { AuthUserRequest } from "../types/app.type";
+import { AuthUserRequest, CreateSchemaRequest } from "../types/app.type";
 import { redisClient } from "../configs/redis";
 import { logger } from "../helpers/logging/logger";
-import { checkVideoParamsMiddelware } from "../middlewares/check_video_params_middleware";
+import { checkVideoParamsMiddelware } from "../middlewares/check_create_video_params_middleware";
 import chalk from "chalk";
+import { checkCreateSchemaParamsMiddleware } from "../middlewares/check_create_schema_params_middleware";
+import supabase from "../configs/supabase";
+import { ImageMetaData } from "../types/database.type";
+import { groupImageByLabel } from "../helpers/images/image_grouping";
+import { generateVideoInputSchema } from "../helpers/remotion/process_video_input_props";
+import { categorizedImage } from "../helpers/redis/update_unlabel_image";
 
 const videoRouter = express.Router();
+
+videoRouter.post(
+  "/create-schema",
+  checkAccessToken,
+  checkCreateSchemaParamsMiddleware,
+  async (req: CreateSchemaRequest, res: Response) => {
+    try {
+      // delete old image queue + add imageIdList -> video_image
+      const { imageIdList, renderQueueId } = req.body;
+
+      await supabase
+        .from("video_image")
+        .delete()
+        .eq("video_id", renderQueueId!)
+        .throwOnError();
+
+      await supabase
+        .from("video_image")
+        .insert(
+          imageIdList!.map((imageId) => ({
+            video_id: renderQueueId!,
+            image_id: imageId!,
+          }))
+        )
+        .throwOnError();
+
+      // fetch all image from image
+
+      const { data } = await supabase
+        .from("video_image")
+        .select("image_id, image(id, image_name, image_bucket_id, labels)")
+        .eq("video_id", renderQueueId!)
+        .throwOnError();
+
+      const imageList = data?.map((image) => ({
+        ...image.image,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })) as ImageMetaData[];
+
+      const imageListProcessed = await categorizedImage(imageList);
+
+      // create schema + update on database
+
+      const imageJSON = groupImageByLabel(imageListProcessed);
+
+      // TODO: update AI Labeling for title + caption
+
+      const videoSchema = generateVideoInputSchema(imageJSON);
+
+      await supabase
+        .from("video_render")
+        .update({
+          schema: videoSchema,
+        })
+        .eq("id", renderQueueId!)
+        .throwOnError();
+
+      res
+        .status(200)
+        .json({ message: "Schema created successfully", data: videoSchema });
+    } catch (error: unknown) {
+      logger.error(`Error creating schema: ${(error as Error).message}`);
+      logger.error(`Stack ${(error as Error).stack}`);
+      res.status(500).json({ error: "An unexpected error occurred" });
+    }
+  }
+);
 
 // TODO: add to HSET create-video-type -> "default" / "selected"
 
 videoRouter.post(
-  "/render",
+  "/create-video",
   checkAccessToken,
   checkVideoParamsMiddelware,
   async (req: AuthUserRequest, res: Response) => {
-    // */
-    // await renderVideo(imageGroupJSON);
-
-    // res.json({
-    //   message: "Video has started rendering. Please wait.",
-    // });
-
-    // await renderVideo();
-
     // Check if video has already been created
     const { user, renderQueueId } = req.body;
 
