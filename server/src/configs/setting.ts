@@ -9,4 +9,5 @@ export const config = {
   redis_url: process.env.REDIS_URL || "redis://localhost:6379",
   supabase_url: process.env.SUPABASE_URL as string,
   supabase_key: process.env.SUPABASE_ADMIN_KEY as string,
+  gemini_api_key: process.env.GEMINI_API_KEY as string,
 };

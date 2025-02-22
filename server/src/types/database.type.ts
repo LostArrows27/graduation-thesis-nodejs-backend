@@ -1,4 +1,4 @@
-import { Database } from "../supabase/database.types";
+import { Database } from "./supabase/database.types";
 
 export type ImageMetaData = Database["public"]["Tables"]["image"]["Row"] & {
   labels: Labels | undefined | null;

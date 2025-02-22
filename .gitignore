@@ -7,4 +7,6 @@ server/.env
 server/public/*
 server/out
 
+server/src/gemini.ts
+
 TODO.md

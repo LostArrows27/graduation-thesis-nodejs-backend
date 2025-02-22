@@ -2,7 +2,6 @@ import { User } from "@supabase/supabase-js";
 import { Request } from "express";
 import { videoOptionSchema, videoTheme } from "../schema/video_option.schema";
 import { z } from "zod";
-import { Json } from "../supabase/database.types";
 
 export interface AuthUserRequest extends Request {
   body: {

@@ -5,6 +5,7 @@ export type Chapter = {
   title: string;
   frame: Frame[];
   transition: Transition;
+  hashtag?: string[];
 };
 
 export type ChapterWithDuration = Chapter & {
@@ -15,6 +16,10 @@ export type Frame = {
   type: FrameType;
   category: FrameCategory;
   images: ImageMetadata[];
+  caption?: string;
+  hashtag?: string[];
+  location?: string;
+  activity?: string;
 };
 
 export type FrameType = "single" | "multi";

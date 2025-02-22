@@ -11,6 +11,7 @@ import { ImageMetaData } from "../types/database.type";
 import { groupImageByLabel } from "../helpers/images/image_grouping";
 import { generateVideoInputSchema } from "../helpers/remotion/process_video_input_props";
 import { categorizedImage } from "../helpers/redis/update_unlabel_image";
+import GeminiService from "../service/gemini_service";
 
 const videoRouter = express.Router();
 
@@ -59,9 +60,13 @@ videoRouter.post(
 
       const imageJSON = groupImageByLabel(imageListProcessed);
 
-      // TODO: update AI Labeling for title + caption
-
       const videoSchema = generateVideoInputSchema(imageJSON);
+
+      const contentWithAICaption = await GeminiService.generateCaptionForVideo(
+        videoSchema.contentScene
+      );
+
+      videoSchema.contentScene = contentWithAICaption;
 
       await supabase
         .from("video_render")

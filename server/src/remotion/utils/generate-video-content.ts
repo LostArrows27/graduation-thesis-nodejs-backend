@@ -44,7 +44,7 @@ export const removeLowActivityConfidence = (images: ImageJSON) => {
   // eslint-disable-next-line guard-for-in
   for (const key in images) {
     filterImages[key] = images[key].filter(
-      (image) => Object.values(image.labels.activity)[0] > MIN_CONFIDENCE,
+      (image) => Object.values(image.labels.activity)[0] > MIN_CONFIDENCE
     );
   }
   return filterImages;
@@ -55,7 +55,7 @@ export const removeLowEventConfidence = (images: ImageJSON) => {
   // eslint-disable-next-line guard-for-in
   for (const key in images) {
     filterImages[key] = images[key].filter(
-      (image) => Object.values(image.labels.event)[0] > MIN_CONFIDENCE,
+      (image) => Object.values(image.labels.event)[0] > MIN_CONFIDENCE
     );
   }
   return filterImages;
@@ -110,6 +110,7 @@ export const generateVideoContent = (images: ImageJSON): Chapter[] => {
       type: selectedImages.length > 1 ? "multi" : "single",
       category: "event",
       images: selectedImages,
+      activity: eventLabel,
     };
 
     chapters.push({
@@ -145,6 +146,7 @@ export const generateVideoContent = (images: ImageJSON): Chapter[] => {
         type: group.length > 1 ? "multi" : "single",
         category: "activity",
         images: group,
+        activity: activityLabel,
       };
 
       if (group.length >= MAX_IMAGE_PER_FRAME) {
