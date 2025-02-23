@@ -14,6 +14,9 @@ const TwoImageBuiltInFrame = ({
   inTiming,
   outTiming,
   durationInFrames,
+  location,
+  hashtag,
+  caption,
 }: BuiltInTransitionProps) => {
   const images = videoFrame.slice(0, 2);
 
@@ -35,7 +38,7 @@ const TwoImageBuiltInFrame = ({
   );
 
   return (
-    <BuiltInLayout bg="dark">
+    <BuiltInLayout location={location} bg="dark">
       <AbsoluteFill>
         {/* image layer */}
         <ImageLayerTwo
@@ -52,6 +55,12 @@ const TwoImageBuiltInFrame = ({
           moveLeft={moveLeft}
           moveRight={moveRight}
           moveUp={moveUp}
+          hashtag={
+            hashtag && hashtag.length >= 2
+              ? hashtag.slice(0, 2)
+              : ["trip_recap", "holiday"]
+          }
+          caption={caption}
         />
       </AbsoluteFill>
     </BuiltInLayout>

@@ -10,6 +10,9 @@ const ThreeImageBuiltInFrame = ({
   inTiming,
   outTiming,
   durationInFrames,
+  location,
+  hashtag,
+  caption,
 }: BuiltInTransitionProps) => {
   const { moveUpNote, goDown, rotateImage, opacity, starOpacity, scale } =
     useThreeImageBuiltInFrameAnimation(
@@ -23,7 +26,7 @@ const ThreeImageBuiltInFrame = ({
   const imagePath = videoFrame.slice(0, 3);
 
   return (
-    <BuiltInLayout bg="dark">
+    <BuiltInLayout location={location} bg="dark">
       {/* image layer */}
       <ImageLayerThree
         images={imagePath}
@@ -33,7 +36,12 @@ const ThreeImageBuiltInFrame = ({
         starOpacity={starOpacity}
       />
       {/* asset layer */}
-      <AssetLayerThree moveUpNote={moveUpNote} goDown={goDown} />
+      <AssetLayerThree
+        hashtag={hashtag}
+        caption={caption}
+        moveUpNote={moveUpNote}
+        goDown={goDown}
+      />
     </BuiltInLayout>
   );
 };

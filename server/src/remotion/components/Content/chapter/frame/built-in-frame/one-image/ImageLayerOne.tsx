@@ -9,6 +9,8 @@ type ImageLayerProps = {
   moveInImage2: number;
   scale: number;
   images: string[];
+  caption: string;
+  hashtag: string[];
 };
 
 const ImageLayerOne = ({
@@ -16,6 +18,8 @@ const ImageLayerOne = ({
   moveInImage2,
   scale,
   images,
+  caption,
+  hashtag,
 }: ImageLayerProps) => {
   return (
     <AbsoluteFill>
@@ -32,10 +36,10 @@ const ImageLayerOne = ({
               /> */}
           <div className="absolute center text-white text-center flex-col w-full h-full py-[70px] px-[90px]">
             <h1 style={{ fontFamily }} className="mb-10 text-5xl font-bold">
-              This is our caption. Replace later
+              {caption}
             </h1>
-            <div style={{ fontFamily }} className="flex justify-between gap-4">
-              {["fire_camp", "holiday"].map((text, index) => (
+            <div style={{ fontFamily }} className="flex justify-between gap-5">
+              {hashtag.map((text, index) => (
                 <span key={index} className="text-2xl">
                   #{text}
                 </span>

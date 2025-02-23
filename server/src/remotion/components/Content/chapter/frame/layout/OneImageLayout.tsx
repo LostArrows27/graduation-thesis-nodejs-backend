@@ -11,6 +11,8 @@ export const OneImageLayout = memo(
     outTiming,
     chapterIndex,
     durationInFrames,
+    location,
+    caption,
   }: NormalImageProps) => {
     // NOTE: simulation 1 images
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -25,7 +27,7 @@ export const OneImageLayout = memo(
     );
 
     return (
-      <Layout chapterIndex={chapterIndex}>
+      <Layout caption ={caption} location = {location} chapterIndex={chapterIndex}>
         <AbsoluteFill className="overflow-hidden">
           <div
             style={{

@@ -11,22 +11,28 @@ const FiveImageLayoutMapping = ({
   chapterIndex,
   durationInFrames,
   frameIndex,
+  caption,
+  hashtag,
+  location,
 }: NormalImageProps) => {
   const index = useMemo(
     () =>
       Math.floor(
         random(
-          `four-image-chapter-${chapterIndex}-frame-${frameIndex}-JSON-${JSON.stringify(videoFrame)}`,
-        ) * 2,
+          `four-image-chapter-${chapterIndex}-frame-${frameIndex}-JSON-${JSON.stringify(videoFrame)}`
+        ) * 2
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    []
   );
 
   switch (index) {
     case 1:
       return (
         <FiveImageStyle1
+          location={location}
+          caption={caption}
+          hashtag={hashtag}
           frameIndex={frameIndex}
           inTiming={inTiming}
           outTiming={outTiming}
@@ -39,6 +45,9 @@ const FiveImageLayoutMapping = ({
     case 2:
       return (
         <FiveImageStyle2
+          location={location}
+          caption={caption}
+          hashtag={hashtag}
           frameIndex={frameIndex}
           inTiming={inTiming}
           outTiming={outTiming}
@@ -50,6 +59,9 @@ const FiveImageLayoutMapping = ({
     default:
       return (
         <FiveImageStyle2
+          location={location}
+          caption={caption}
+          hashtag={hashtag}
           frameIndex={frameIndex}
           inTiming={inTiming}
           outTiming={outTiming}

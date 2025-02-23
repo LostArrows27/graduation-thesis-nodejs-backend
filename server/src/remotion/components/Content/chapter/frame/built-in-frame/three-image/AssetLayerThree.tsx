@@ -10,12 +10,19 @@ const { fontFamily } = loadFont();
 type AssetLayerThreeProps = {
   goDown: number;
   moveUpNote: number;
+  hashtag: string[];
+  caption: string;
 };
 
-const AssetLayerThree = ({ goDown, moveUpNote }: AssetLayerThreeProps) => {
+const AssetLayerThree = ({
+  goDown,
+  moveUpNote,
+  hashtag,
+  caption,
+}: AssetLayerThreeProps) => {
   const [paperPath, tape2Path, wowPath, tapePath, notePath] = useMemoAssetArray(
     ["paper_2.png", "tape_2.png", "wow.gif", "tape.png", "note.png"],
-    builtInPath,
+    builtInPath
   );
 
   return (
@@ -67,9 +74,9 @@ const AssetLayerThree = ({ goDown, moveUpNote }: AssetLayerThreeProps) => {
             fontFamily,
           }}
         >
-          <h1 className="mb-5">This is our caption. Replace later</h1>
+          <h1 className="mb-5">{caption}</h1>
           <div style={{ fontFamily }} className="flex gap-4">
-            {["fire_camp", "holiday"].map((text, index) => (
+            {hashtag.map((text, index) => (
               <span key={index} className="text-2xl">
                 #{text}
               </span>

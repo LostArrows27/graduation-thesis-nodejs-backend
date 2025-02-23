@@ -20,6 +20,9 @@ const SelfBuiltFrameMapping = ({
   outTiming,
   durationInFrames,
   frameIndex,
+  location,
+  hashtag,
+  caption,
 }: SelfBuiltFrameProps) => {
   const imageCount = frame.length;
 
@@ -33,6 +36,9 @@ const SelfBuiltFrameMapping = ({
           durationInFrames={durationInFrames}
           frame={frame}
           chapterIndex={chapterIndex}
+          hashtag={hashtag}
+          caption={caption}
+          location={location}
         />
       );
     case 2:
@@ -44,6 +50,9 @@ const SelfBuiltFrameMapping = ({
           durationInFrames={durationInFrames}
           frame={frame}
           chapterIndex={chapterIndex}
+          hashtag={hashtag}
+          caption={caption}
+          location={location}
         />
       );
     case 3:
@@ -55,6 +64,9 @@ const SelfBuiltFrameMapping = ({
           durationInFrames={durationInFrames}
           frame={frame}
           chapterIndex={chapterIndex}
+          hashtag={hashtag}
+          caption={caption}
+          location={location}
         />
       );
     case 4:
@@ -66,6 +78,9 @@ const SelfBuiltFrameMapping = ({
           durationInFrames={durationInFrames}
           frame={frame}
           chapterIndex={chapterIndex}
+          hashtag={hashtag}
+          caption={caption}
+          location={location}
         />
       );
     case 5:
@@ -77,6 +92,9 @@ const SelfBuiltFrameMapping = ({
           durationInFrames={durationInFrames}
           frame={frame}
           chapterIndex={chapterIndex}
+          hashtag={hashtag}
+          caption={caption}
+          location={location}
         />
       );
     case 6:
@@ -88,6 +106,9 @@ const SelfBuiltFrameMapping = ({
           durationInFrames={durationInFrames}
           frame={frame}
           chapterIndex={chapterIndex}
+          hashtag={hashtag}
+          caption={caption}
+          location={location}
         />
       );
     default:
@@ -99,6 +120,9 @@ const SelfBuiltFrameMapping = ({
           durationInFrames={durationInFrames}
           frame={frame}
           chapterIndex={chapterIndex}
+          hashtag={hashtag}
+          caption={caption}
+          location={location}
         />
       );
   }

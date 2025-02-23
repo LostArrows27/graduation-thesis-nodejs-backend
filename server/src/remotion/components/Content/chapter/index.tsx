@@ -25,6 +25,7 @@ const VideoChapter = ({
   frame,
   index,
   titleStyle,
+  hashtag,
 }: VideoChapterProps) => {
   // NOTE: add dev if render error:)
   const chapterTitleImages = useMemo(
@@ -56,6 +57,7 @@ const VideoChapter = ({
           frameCategory={frame[0].category}
           images={chapterTitleImages}
           duration={chapterTitleDuration}
+          hashtag={hashtag}
         />
       </TransitionSeries.Sequence>
       <TransitionSeries.Transition

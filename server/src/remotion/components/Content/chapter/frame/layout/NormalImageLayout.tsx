@@ -22,10 +22,10 @@ const { fontFamily: titleFontFamily } = loadTitleFont();
 
 // TODO: add location later
 export const Layout = memo(
-  ({ children, chapterIndex }: NormalImageLayoutProps) => {
+  ({ children, chapterIndex, location, caption }: NormalImageLayoutProps) => {
     const [corner1Path, corner2Path, locationPath] = useMemoAssetArray(
       ["corner_1.png", "corner_2.png", "location.gif"],
-      normalFramePath,
+      normalFramePath
     );
 
     const bgPath = useMemoAssetPath("/images/content/title_2/bg.jpg");
@@ -57,7 +57,7 @@ export const Layout = memo(
             }}
             className="absolute text-3xl text-zinc-200 pr-2  w-[150px] h-[60px] bottom-2 left-14 text-left"
           >
-            144 Ba Vì, Hà Nội
+            {location}
           </div>
           <ChapterGraphic chapterIndex={chapterIndex} />
         </AbsoluteFill>
@@ -69,13 +69,13 @@ export const Layout = memo(
                 fontFamily: titleFontFamily,
               }}
             >
-              Kỉ niệm bên lửa trại
+              {caption}
             </h1>
           </div>
         </AbsoluteFill>
       </AbsoluteFill>
     );
-  },
+  }
 );
 
 const ChapterGraphic = memo(({ chapterIndex }: { chapterIndex: number }) => {
@@ -83,7 +83,7 @@ const ChapterGraphic = memo(({ chapterIndex }: { chapterIndex: number }) => {
 
   const [cPath, hPath, aPath, pPath, tPath, ePath, rPath] = useMemoAssetArray(
     ["c.png", "h.png", "a.png", "p.png", "t.png", "e.png", "r.png"],
-    normalFramePath,
+    normalFramePath
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps

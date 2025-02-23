@@ -11,6 +11,9 @@ const OneImageBuiltInFrame = ({
   inTiming,
   outTiming,
   durationInFrames,
+  caption,
+  hashtag,
+  location,
 }: BuiltInTransitionProps) => {
   const images = videoFrame.slice(0, 1);
 
@@ -27,11 +30,11 @@ const OneImageBuiltInFrame = ({
       in: inTiming,
       out: outTiming,
     },
-    durationInFrames,
+    durationInFrames
   );
 
   return (
-    <BuiltInLayout bg="light">
+    <BuiltInLayout location={location} bg="light">
       <AbsoluteFill>
         {/* image layer */}
         <ImageLayerOne
@@ -39,6 +42,8 @@ const OneImageBuiltInFrame = ({
           images={images}
           moveInImage={moveInImage}
           scale={scale}
+          caption={caption}
+          hashtag={hashtag}
         />
         {/* asset layer */}
         <AssetLayerOne

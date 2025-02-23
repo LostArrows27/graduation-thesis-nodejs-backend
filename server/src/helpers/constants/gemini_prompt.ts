@@ -4,12 +4,12 @@ import { SlideCaptionsRequest } from "../../types/gemini.type";
 export const generateChaptersTitlePrompt = (place_arr: string[]) => {
   const prompt = `Bạn là một nhà biên kịch sáng tạo, hãy tạo ra những tiêu đề và hashtag cho các chapter trong video recap chuyến đi. Mỗi chapter sẽ có 1 tiêu đề và 2 hashtag. 
   - Tiêu đề: Tiêu đề cần ngắn gọn, tự nhiên, tối đa 6 từ và hấp dẫn.
-  - Hashtag: Mỗi chapter sẽ có 2 hashtag, có thể bằng tiếng Việt hoặc tiếng Anh, nhưng mỗi chapter chỉ sử dụng một ngôn ngữ duy nhất (hoặc toàn bộ tiếng Việt hoặc toàn bộ tiếng Anh). Hashtag cần liên quan đến các yếu tố trong chapter như địa điểm và sự kiện.
-  
+  - Hashtag: Mỗi chapter sẽ có 4 hashtag, có thể bằng tiếng Việt hoặc tiếng Anh, nhưng mỗi chapter chỉ sử dụng một ngôn ngữ duy nhất (hoặc toàn bộ tiếng Việt hoặc toàn bộ tiếng Anh). Hashtag cần liên quan đến các yếu tố trong chapter như địa điểm và sự kiện.
+  - Hashtag: Nên ở dạng chữ thường và phải dùng dấu "_" để phân cách giữa các từ thay cho dấu cách
   Cho input là mảng label địa điểm của những chapter đó, bạn hãy trả về một mảng các đối tượng JSON, mỗi đối tượng chứa tiêu đề chapter và 2 hashtag của chapter dưới dạng:
   [ 
-  { {"name": "place", "title": "Tên chapter", "hashtags": ["hashtag1", "hashtag2"]} },
-  { {"name": "place", "title": "Tên chapter", "hashtags": ["hashtag3", "hashtag4"]} }
+  { {"name": "place", "title": "Tên chapter", "hashtags": ["hashtag1", "hashtag2", "hashtag3", "hashtag4"]} },
+  { {"name": "place", "title": "Tên chapter", "hashtags": ["hashtag1", "hashtag2", "hashtag3", "hashtag4"]} }
   ].
   Không cần thêm bất kỳ thông tin nào khác.
   
@@ -18,10 +18,10 @@ export const generateChaptersTitlePrompt = (place_arr: string[]) => {
   Lưu ý:
   0. Trường hợp đặc biệt: địa điểm là "small_group" thì tiêu đề là "Khoảnh khắc khác".
   1. Mỗi tiêu đề tối đa 6 từ.
-  2. Mỗi chapter phải có 2 hashtag khác nhau, không vượt quá 12 ký tự mỗi hashtag.
+  2. Mỗi chapter phải có 4 hashtag khác nhau, không vượt quá 12 ký tự mỗi hashtag.
   3. Hashtag nên có thể sử dụng cho mạng xã hội, và phải dễ hiểu, phổ biến (tiếng Việt hoặc tiếng Anh).
   4. Đan xen giữa tiếng Việt và tiếng Anh giữa các chapter khác nhau.
-  5. Hashtag nên ở dạng chữ thường và dùng "_" để phân cách các từ (nếu cần) (kể cả với tiếng Việt hay tiếng Anh).
+  5. Hashtag kể cả tiếng Việt và tiếng Anh nên ở dạng chữ thường và phải dùng "_" để phân cách các từ thay cho dấu cách.
   6. Chọn ngẫu nhiên một phong cách dưới đây cho mỗi chapter, đảm bảo mỗi chapter có caption theo phong cách khác nhau:
    - Phong cách mô tả thông thường.
    - Phong cách kể chuyện (Storytelling).

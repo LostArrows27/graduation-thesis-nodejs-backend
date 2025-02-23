@@ -12,7 +12,12 @@ const { fontFamily } = loadFont();
 
 const { fontFamily: titleFontFamily } = loadTitleFont();
 
-const PaperStyleTitle = ({ images, index, title }: ChapterStyleProps) => {
+const PaperStyleTitle = ({
+  images,
+  index,
+  title,
+  hashtag,
+}: ChapterStyleProps) => {
   const [
     screenPath,
     arrowPath,
@@ -48,21 +53,26 @@ const PaperStyleTitle = ({ images, index, title }: ChapterStyleProps) => {
           className="left-[210px] top-4 absolute w-[200px] h-auto -rotate-45"
           src={arrowPath}
         />
-        <h1
-          style={{
-            fontFamily: titleFontFamily,
-          }}
-          className="absolute leading-[1.3] text-7xl text-center w-[400px]  text-[rgb(93,69,45)] top-[29%] left-4 uppercase"
-        >
-          Khu cắm trại
-        </h1>
+        <div className="absolute top-[25%] h-[200px] flex items-end left-4 w-[420px] ">
+          <h1
+            style={{
+              fontFamily: titleFontFamily,
+            }}
+            className="leading-[1.3] text-6xl text-center w-full   text-[rgb(93,69,45)] uppercase"
+          >
+            {title || `Chapter ${index + 1}`}
+          </h1>
+        </div>
         <h1
           style={{
             fontFamily: titleFontFamily,
           }}
           className="absolute text-3xl text-center w-[400px]  top-[59%] left-4 uppercase"
         >
-          {["outdoor", "campfire"].map((word, index) => (
+          {(hashtag && hashtag.length >= 2
+            ? hashtag.slice(0, 2)
+            : ["outdoor", "travel"]
+          ).map((word, index) => (
             <span key={index} className="ml-7 text-[rgb(93,69,45)]">
               #{word}
             </span>

@@ -11,6 +11,8 @@ const FiveImageStyle2 = ({
   chapterIndex,
   durationInFrames,
   frameIndex,
+  caption,
+  location,
 }: NormalImageProps) => {
   const imagePath = videoFrame.slice(0, 5);
 
@@ -30,7 +32,7 @@ const FiveImageStyle2 = ({
   );
 
   return (
-    <Layout chapterIndex={chapterIndex}>
+    <Layout caption={caption} location={location} chapterIndex={chapterIndex}>
       <AbsoluteFill className="overflow-hidden">
         {/* first col - up */}
         <div

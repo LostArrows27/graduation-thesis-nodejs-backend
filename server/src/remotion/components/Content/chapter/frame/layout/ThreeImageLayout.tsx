@@ -10,6 +10,8 @@ const ThreeImageLayout = ({
   outTiming,
   chapterIndex,
   durationInFrames,
+  location,
+  caption,
 }: NormalImageProps) => {
   // NOTE: similation 2 images
   const [image1, image2, image3] = videoFrame.slice(0, 3);
@@ -23,7 +25,7 @@ const ThreeImageLayout = ({
   );
 
   return (
-    <Layout chapterIndex={chapterIndex}>
+    <Layout caption={caption} location={location} chapterIndex={chapterIndex}>
       <AbsoluteFill className="overflow-hidden">
         <div
           style={{

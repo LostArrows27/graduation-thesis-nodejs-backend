@@ -11,6 +11,8 @@ const FourImageStyle3 = ({
   chapterIndex,
   durationInFrames,
   frameIndex,
+  location,
+  caption,
 }: NormalImageProps) => {
   const imagePath = videoFrame.slice(0, 4);
 
@@ -30,7 +32,7 @@ const FourImageStyle3 = ({
   );
 
   return (
-    <Layout chapterIndex={chapterIndex}>
+    <Layout location={location} caption={caption} chapterIndex={chapterIndex}>
       <AbsoluteFill className="overflow-hidden">
         <div
           style={{

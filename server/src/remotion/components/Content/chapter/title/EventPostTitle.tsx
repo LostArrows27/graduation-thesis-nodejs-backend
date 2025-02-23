@@ -8,7 +8,7 @@ import { memo } from "react";
 import ImageLayer from "./event-title/ImageLayer";
 
 // TODO: add opacity for first chapter
-const EventPostTitle = ({ images, index, duration }: EventTitleProps) => {
+const EventPostTitle = ({ images, index, duration, title, hashtag }: EventTitleProps) => {
   const bgPath = useMemoAssetPath(eventAssetPath + "bg.jpg");
 
   return (
@@ -17,7 +17,7 @@ const EventPostTitle = ({ images, index, duration }: EventTitleProps) => {
         <Img src={bgPath} className="image-fit-full" />
       </AbsoluteFill>
       {/* caption layer */}
-      <CaptionLayer index={index} duration={duration} images={images} />
+      <CaptionLayer hashtag={hashtag} title = {title} index={index} duration={duration} images={images} />
       {/* asset layer */}
       <AssetLayer />
       {/* image layer */}

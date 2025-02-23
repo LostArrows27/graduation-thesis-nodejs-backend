@@ -13,6 +13,7 @@ const BuiltInLayout = ({
   children,
   bg,
   imageNumber,
+  location,
 }: BuiltInTransitionLayoutProps) => {
   const [bgPath, paperPath, yellowNotePath, blackNotePath] = useMemoAssetArray(
     [
@@ -21,7 +22,7 @@ const BuiltInLayout = ({
       "yellow_note.png",
       "black_note.png",
     ],
-    builtInPath,
+    builtInPath
   );
 
   return (
@@ -52,7 +53,7 @@ const BuiltInLayout = ({
                   fontFamily,
                 }}
               >
-                144 Ba Vì, Hà Nội
+                {location || "Hà Nội, Việt Nam"}
               </p>
             </div>
             <Img className="image-fit-full" src={yellowNotePath} />
@@ -72,7 +73,7 @@ const BuiltInLayout = ({
                   fontFamily,
                 }}
               >
-                144 Ba Vì, Hà Nội
+                {location || "Hà Nội, Việt Nam"}
               </p>
             </div>
             <Img className="image-fit-full" src={blackNotePath} />

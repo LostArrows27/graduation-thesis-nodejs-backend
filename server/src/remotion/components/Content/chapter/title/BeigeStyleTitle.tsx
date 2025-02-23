@@ -13,7 +13,12 @@ const { fontFamily: subFontFamily } = loadSubFont();
 
 const { fontFamily: titleFontFamily } = loadTitleFont();
 
-const BeigeStyleTitle = ({ images, index, title }: ChapterStyleProps) => {
+const BeigeStyleTitle = ({
+  images,
+  index,
+  title,
+  hashtag,
+}: ChapterStyleProps) => {
   const locationTitleNote = useMemo(
     () =>
       chooseLocationTitleNote(
@@ -53,14 +58,14 @@ const BeigeStyleTitle = ({ images, index, title }: ChapterStyleProps) => {
       </AbsoluteFill>
       <AbsoluteFill>
         <AbsoluteFill>
-          <div className="top-1/3 center flex-col left-10 absolute w-[450px] center">
+          <div className="top-[30%] center flex-col left-10 absolute w-[450px] center">
             <h1
               style={{
                 fontFamily: subFontFamily,
               }}
               className="text-6xl font-bold text-center leading-[1.5] uppercase text-[rgb(93,69,45)]"
             >
-              Khu cắm trại
+              {title || `Chapter ${index}`}
             </h1>
             <div
               style={{
@@ -128,14 +133,16 @@ const BeigeStyleTitle = ({ images, index, title }: ChapterStyleProps) => {
             style={{
               fontFamily: titleFontFamily,
             }}
-            className="w-[550px] px-5 pl-10 items-center pb-5 flex absolute right-36 top-[64%] h-[130px]"
+            className="w-[550px]  justify-between px-5 pr-10 pl-10 items-center pb-5 flex absolute right-36 top-[64%] h-[130px]"
           >
-            <div className="mr-32 text-3xl text-[rgb(93,69,45)] font-medium">
-              #camp_fire
-            </div>
-            <div className="text-3xl font-medium text-[rgb(93,69,45)]">
-              #our_holiday
-            </div>
+            {(hashtag && hashtag.length >= 2
+              ? hashtag.slice(0, 2)
+              : ["travel_with_us", "our_holiday"]
+            ).map((tag) => (
+              <div className="text-3xl text-[rgb(93,69,45)] font-medium">
+                #{tag}
+              </div>
+            ))}
           </div>
         </AbsoluteFill>
       </AbsoluteFill>

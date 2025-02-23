@@ -10,6 +10,8 @@ const TwoImageLayout = ({
   outTiming,
   chapterIndex,
   durationInFrames,
+  caption,
+  location,
 }: NormalImageProps) => {
   // NOTE: similation 2 images
   const [image1, image2] = [videoFrame[0], videoFrame[1]];
@@ -23,7 +25,7 @@ const TwoImageLayout = ({
   );
 
   return (
-    <Layout chapterIndex={chapterIndex}>
+    <Layout caption={caption} location={location} chapterIndex={chapterIndex}>
       <AbsoluteFill className="overflow-hidden">
         <div
           style={{

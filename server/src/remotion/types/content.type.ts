@@ -18,12 +18,14 @@ export type ChapterTitleProps = {
   titleStyle: number;
   frameCategory: FrameCategory;
   duration: number;
+  hashtag?: string[];
 };
 
 export type ChapterStyleProps = {
   title: string;
   images: string[];
   index: number;
+  hashtag?: string[];
 };
 
 export type EventTitleProps = {
@@ -31,6 +33,7 @@ export type EventTitleProps = {
   images: string[];
   index: number;
   duration: number;
+  hashtag?: string[];
 };
 
 export type ChapterContentProps = {
@@ -61,6 +64,9 @@ export type SelfBuiltFrameProps = Omit<
   frame: string[];
   inTiming: number;
   outTiming: number;
+  caption: string;
+  hashtag: string[];
+  location: string;
 };
 
 export type BuiltInTransitionProps = Omit<
@@ -70,12 +76,16 @@ export type BuiltInTransitionProps = Omit<
   frame: string[];
   inTiming: number;
   outTiming: number;
+  caption: string;
+  hashtag: string[];
+  location: string;
 };
 
 export type BuiltInTransitionLayoutProps = {
   children: React.ReactNode;
   bg: "light" | "dark";
   imageNumber?: number;
+  location: string;
 };
 
 export type NormalImageProps = SelfBuiltFrameProps;
@@ -83,4 +93,6 @@ export type NormalImageProps = SelfBuiltFrameProps;
 export type NormalImageLayoutProps = {
   children: React.ReactNode;
   chapterIndex: number;
+  location: string;
+  caption: string;
 };

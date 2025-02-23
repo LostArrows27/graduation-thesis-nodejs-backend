@@ -19,6 +19,9 @@ const SixImageBuiltInFrame = ({
   inTiming,
   outTiming,
   durationInFrames,
+  location,
+  hashtag,
+  caption,
 }: BuiltInTransitionProps) => {
   const { moveUp, moveDown, opacity, scale } =
     useFourImageBuiltInFrameStyle1Animation(
@@ -38,7 +41,7 @@ const SixImageBuiltInFrame = ({
   const imagesPath = videoFrame.slice(0, 6);
 
   return (
-    <BuiltInLayout bg="dark">
+    <BuiltInLayout location={location} bg="dark">
       {/* image layer */}
       <ImageLayerSix
         images={imagesPath}
@@ -55,7 +58,12 @@ const SixImageBuiltInFrame = ({
         images={imagesPath}
       />
       {/* asset layer */}
-      <AssetLayerSix starOpacity={starOpacity} opacity={opacity} />
+      <AssetLayerSix
+        caption={caption}
+        hashtag={hashtag}
+        starOpacity={starOpacity}
+        opacity={opacity}
+      />
     </BuiltInLayout>
   );
 };
@@ -159,75 +167,84 @@ const ImageLayerSix = memo(
 type AssetLayerSixProps = {
   starOpacity: number;
   opacity: number;
+  caption: string;
+  hashtag: string[];
 };
 
-const AssetLayerSix = memo(({ starOpacity, opacity }: AssetLayerSixProps) => {
-  const [starFewPath, starManyPath, tapePath, notePath] = useMemoAssetArray(
-    ["star_few.gif", "star_many.gif", "tape.png", "note.png"],
-    builtInPath
-  );
+const AssetLayerSix = memo(
+  ({ starOpacity, opacity, hashtag, caption }: AssetLayerSixProps) => {
+    const [starFewPath, starManyPath, tapePath, notePath] = useMemoAssetArray(
+      ["star_few.gif", "star_many.gif", "tape.png", "note.png"],
+      builtInPath
+    );
 
-  return (
-    <>
-      <AbsoluteFill>
+    return (
+      <>
+        <AbsoluteFill>
+          <AbsoluteFill>
+            <div
+              style={{
+                bottom: `${200}px`,
+                left: `${400}px`,
+                opacity,
+              }}
+              className="absolute w-[340px] left-32 h-[243.1px]"
+            >
+              <Img
+                className="object-cover absolute -top-8 -left-8 object-center z-20 rotate-90 w-[100px] h-auto "
+                src={tapePath}
+              />
+              <Img
+                className="absolute object-cover object-center w-full h-full rotate-180"
+                src={notePath}
+              />
+              <div
+                className="absolute flex-col center text-4xl text-center z-[10] w-full h-[80%] p-5"
+                style={{
+                  fontFamily,
+                }}
+              >
+                <h1 className="mb-5">{caption}</h1>
+                <div style={{ fontFamily }} className="flex gap-4">
+                  {hashtag.map((text, index) => (
+                    <span key={index} className="text-2xl">
+                      #{text}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </AbsoluteFill>
+        </AbsoluteFill>
         <AbsoluteFill>
           <div
             style={{
-              bottom: `${200}px`,
-              left: `${400}px`,
-              opacity,
+              opacity: starOpacity,
             }}
-            className="absolute w-[340px] left-32 h-[243.1px]"
+            className="absolute w-[40px] h-[40px] top-[12%] right-[250px]"
           >
-            <Img
-              className="object-cover absolute -top-8 -left-8 object-center z-20 rotate-90 w-[100px] h-auto "
-              src={tapePath}
+            <Gif
+              width={50}
+              loopBehavior="loop"
+              fit="contain"
+              src={starFewPath}
             />
-            <Img
-              className="absolute object-cover object-center w-full h-full rotate-180"
-              src={notePath}
-            />
-            <div
-              className="absolute flex-col center text-4xl text-center z-[10] w-full h-[80%] p-5"
-              style={{
-                fontFamily,
-              }}
-            >
-              <h1 className="mb-5">This is our caption. Replace later</h1>
-              <div style={{ fontFamily }} className="flex gap-4">
-                {["fire_camp", "holiday"].map((text, index) => (
-                  <span key={index} className="text-2xl">
-                    #{text}
-                  </span>
-                ))}
-              </div>
-            </div>
           </div>
         </AbsoluteFill>
-      </AbsoluteFill>
-      <AbsoluteFill>
-        <div
-          style={{
-            opacity: starOpacity,
-          }}
-          className="absolute w-[40px] h-[40px] top-[12%] right-[250px]"
-        >
-          <Gif width={50} loopBehavior="loop" fit="contain" src={starFewPath} />
-        </div>
-      </AbsoluteFill>
-      <AbsoluteFill>
-        <div
-          style={{
-            opacity: starOpacity,
-          }}
-          className="absolute w-[150px] h-[155.6338px] bottom-[250px] left-[120px] "
-        >
-          <Gif fit="contain" loopBehavior="loop" src={starManyPath} />
-        </div>
-      </AbsoluteFill>
-    </>
-  );
-});
+        <AbsoluteFill>
+          <div
+            style={{
+              opacity: starOpacity,
+            }}
+            className="absolute w-[150px] h-[155.6338px] bottom-[250px] left-[120px] "
+          >
+            <Gif fit="contain" loopBehavior="loop" src={starManyPath} />
+          </div>
+        </AbsoluteFill>
+      </>
+    );
+  }
+);
 
 type ImageLayerSecondSixProps = {
   moveInLeft1: number;

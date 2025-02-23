@@ -16,6 +16,9 @@ const FourImageBuiltInFrameStyle1 = ({
   inTiming,
   outTiming,
   durationInFrames,
+  location,
+  hashtag,
+  caption,
 }: BuiltInTransitionProps) => {
   const { moveUp, moveDown, opacity, appearFromLeft, scale, starOpacity } =
     useFourImageBuiltInFrameStyle1Animation(
@@ -29,7 +32,7 @@ const FourImageBuiltInFrameStyle1 = ({
   const imagesPath = videoFrame.slice(0, 4);
 
   return (
-    <BuiltInLayout bg="dark">
+    <BuiltInLayout location={location} bg="dark">
       {/* image layer */}
       <ImageLayerFourStyle1
         moveDown={moveDown}
@@ -40,6 +43,8 @@ const FourImageBuiltInFrameStyle1 = ({
       />
       {/* asset layer */}
       <AssetLayerFourStyle1
+        caption={caption}
+        hashtag={hashtag}
         appearFromLeft={appearFromLeft}
         starOpacity={starOpacity}
       />
@@ -146,10 +151,17 @@ const ImageLayerFourStyle1 = memo(
 type AssetLayerFourStyle1Props = {
   appearFromLeft: number;
   starOpacity: number;
+  caption: string;
+  hashtag: string[];
 };
 
 const AssetLayerFourStyle1 = memo(
-  ({ appearFromLeft, starOpacity }: AssetLayerFourStyle1Props) => {
+  ({
+    appearFromLeft,
+    starOpacity,
+    caption,
+    hashtag,
+  }: AssetLayerFourStyle1Props) => {
     const [tapePath, notePath, starFewPath, starManyPath] = useMemoAssetArray(
       ["tape.png", "note.png", "star_few.gif", "star_many.gif"],
       builtInPath
@@ -179,9 +191,9 @@ const AssetLayerFourStyle1 = memo(
                 fontFamily,
               }}
             >
-              <h1 className="mb-5">This is our caption. Replace later</h1>
+              <h1 className="mb-5">{caption}</h1>
               <div style={{ fontFamily }} className="flex gap-4">
-                {["fire_camp", "holiday"].map((text, index) => (
+                {hashtag.map((text, index) => (
                   <span key={index} className="text-2xl">
                     #{text}
                   </span>

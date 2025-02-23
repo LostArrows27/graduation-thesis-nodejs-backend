@@ -13,6 +13,8 @@ type AssetLayerProps = {
   moveDown: number;
   moveUp: number;
   moveUpNote: number;
+  caption?: string;
+  hashtag: string[];
 };
 
 const AssetLayerTwo = ({
@@ -21,6 +23,8 @@ const AssetLayerTwo = ({
   moveDown,
   moveUp,
   moveUpNote,
+  caption,
+  hashtag,
 }: AssetLayerProps) => {
   const [
     framePath,
@@ -42,7 +46,7 @@ const AssetLayerTwo = ({
       "star_many.gif",
       "note.png",
     ],
-    builtInPath,
+    builtInPath
   );
 
   return (
@@ -108,9 +112,9 @@ const AssetLayerTwo = ({
             fontFamily,
           }}
         >
-          <h1 className="mb-5">This is our caption. Replace later</h1>
+          <h1 className="mb-5">{caption}</h1>
           <div style={{ fontFamily }} className="flex gap-4">
-            {["fire_camp", "holiday"].map((text, index) => (
+            {hashtag.map((text, index) => (
               <span key={index} className="text-2xl">
                 #{text}
               </span>

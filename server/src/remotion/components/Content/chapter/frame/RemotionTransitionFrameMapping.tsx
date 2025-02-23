@@ -25,6 +25,9 @@ const RemotionTransitionFrameMapping = ({
   chapterIndex,
   durationInFrames,
   frameIndex,
+  caption,
+  hashtag,
+  location,
 }: BuiltInTransitionProps) => {
   const imageCount = frame.length;
 
@@ -38,6 +41,9 @@ const RemotionTransitionFrameMapping = ({
           chapterIndex={chapterIndex}
           durationInFrames={durationInFrames}
           frameIndex={frameIndex}
+          caption={caption}
+          hashtag={hashtag}
+          location={location}
         />
       );
 
@@ -50,6 +56,9 @@ const RemotionTransitionFrameMapping = ({
           chapterIndex={chapterIndex}
           durationInFrames={durationInFrames}
           frameIndex={frameIndex}
+          caption={caption}
+          hashtag={hashtag}
+          location={location}
         />
       );
 
@@ -62,6 +71,9 @@ const RemotionTransitionFrameMapping = ({
           chapterIndex={chapterIndex}
           durationInFrames={durationInFrames}
           frameIndex={frameIndex}
+          caption={caption}
+          hashtag={hashtag}
+          location={location}
         />
       );
 
@@ -74,6 +86,9 @@ const RemotionTransitionFrameMapping = ({
           chapterIndex={chapterIndex}
           durationInFrames={durationInFrames}
           frameIndex={frameIndex}
+          caption={caption}
+          hashtag={hashtag}
+          location={location}
         />
       );
 
@@ -86,6 +101,9 @@ const RemotionTransitionFrameMapping = ({
           chapterIndex={chapterIndex}
           durationInFrames={durationInFrames}
           frameIndex={frameIndex}
+          caption={caption}
+          hashtag={hashtag}
+          location={location}
         />
       );
 
@@ -98,18 +116,24 @@ const RemotionTransitionFrameMapping = ({
           chapterIndex={chapterIndex}
           durationInFrames={durationInFrames}
           frameIndex={frameIndex}
+          caption={caption}
+          hashtag={hashtag}
+          location={location}
         />
       );
 
     default:
       return (
-        <SixImageBuiltInFrame
+        <TwoImageBuiltInTransition
           frame={frame}
           inTiming={inTiming}
           outTiming={outTiming}
           chapterIndex={chapterIndex}
           durationInFrames={durationInFrames}
           frameIndex={frameIndex}
+          caption={caption}
+          hashtag={hashtag}
+          location={location}
         />
       );
   }

@@ -12,22 +12,28 @@ const FourImageStyleMapping = ({
   chapterIndex,
   frameIndex,
   durationInFrames,
+  location,
+  caption,
+  hashtag,
 }: NormalImageProps) => {
   const index = useMemo(
     () =>
       Math.floor(
         random(
-          `four-image-chapter-${chapterIndex}-frame-${frameIndex}-JSON-${JSON.stringify(videoFrame)}`,
-        ) * 3,
+          `four-image-chapter-${chapterIndex}-frame-${frameIndex}-JSON-${JSON.stringify(videoFrame)}`
+        ) * 3
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    []
   );
 
   switch (index) {
     case 0:
       return (
         <FourImageStyle1
+          location={location}
+          caption={caption}
+          hashtag={hashtag}
           frameIndex={frameIndex}
           inTiming={inTiming}
           outTiming={outTiming}
@@ -40,6 +46,9 @@ const FourImageStyleMapping = ({
     case 1:
       return (
         <FourImageStyle2
+          location={location}
+          caption={caption}
+          hashtag={hashtag}
           frameIndex={frameIndex}
           inTiming={inTiming}
           outTiming={outTiming}
@@ -51,6 +60,9 @@ const FourImageStyleMapping = ({
     case 2:
       return (
         <FourImageStyle3
+          location={location}
+          caption={caption}
+          hashtag={hashtag}
           frameIndex={frameIndex}
           inTiming={inTiming}
           outTiming={outTiming}
@@ -63,6 +75,9 @@ const FourImageStyleMapping = ({
     default:
       return (
         <FourImageStyle3
+          location={location}
+          caption={caption}
+          hashtag={hashtag}
           frameIndex={frameIndex}
           inTiming={inTiming}
           outTiming={outTiming}

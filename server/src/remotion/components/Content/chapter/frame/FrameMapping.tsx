@@ -27,6 +27,13 @@ const FrameMapping = ({
           outTiming={timingInFrame.out}
           chapterIndex={chapterIndex}
           frame={processedFrame}
+          caption={frame.caption || "Let's review our trip."}
+          hashtag={
+            frame.hashtag && frame.hashtag.length >= 2
+              ? frame.hashtag.slice(0, 2)
+              : ["trip_recap", "holiday"]
+          }
+          location={frame.location || "Hà Nội, Việt Nam"}
         />
       );
     case "self-built":
@@ -38,6 +45,13 @@ const FrameMapping = ({
           outTiming={timingInFrame.out}
           chapterIndex={chapterIndex}
           frame={processedFrame}
+          hashtag={
+            frame.hashtag && frame.hashtag.length >= 2
+              ? frame.hashtag.slice(0, 2)
+              : ["trip_recap", "holiday"]
+          }
+          caption={frame.caption || "Let's review our trip."}
+          location={frame.location || "Hà Nội, Việt Nam"}
         />
       );
     default:
@@ -49,6 +63,13 @@ const FrameMapping = ({
           outTiming={timingInFrame.out}
           chapterIndex={chapterIndex}
           frame={processedFrame}
+          hashtag={
+            frame.hashtag && frame.hashtag.length >= 2
+              ? frame.hashtag.slice(0, 2)
+              : ["trip_recap", "holiday"]
+          }
+          caption={frame.caption || "Let's review our trip !"}
+          location={frame.location || "Hà Nội, Việt Nam"}
         />
       );
   }
