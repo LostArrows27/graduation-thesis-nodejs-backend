@@ -42,6 +42,7 @@ const MainScene = ({ data, titleStyle }: ContentProps) => {
                 durationInFrames={chapter.durationInFrames}
                 frame={chapter.frame}
                 index={index}
+                hashtag={chapter.hashtag}
                 titleStyle={titleStyle}
               />
             </TransitionSeries.Sequence>

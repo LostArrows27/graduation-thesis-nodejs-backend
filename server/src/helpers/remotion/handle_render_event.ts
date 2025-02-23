@@ -1,6 +1,5 @@
 import { logger } from "../logging/logger";
-import { ImageJSON } from "../../remotion/types/frame.type";
-import { RenderVideoOptions } from "../../types/render.type";
+import { InputPropsType, RenderVideoOptions } from "../../types/render.type";
 import { processVideoInputProps } from "./process_video_input_props";
 import supabase from "../../configs/supabase";
 import path, { dirname } from "path";
@@ -44,11 +43,11 @@ export const onRenderProgress = async (
 };
 
 export const generateRenderOption = async (
-  passImageJSON: ImageJSON,
+  videoSchema: InputPropsType,
   renderQueueId: string,
   scale = 1
 ): Promise<RenderVideoOptions> => {
-  const inputProps = await processVideoInputProps(passImageJSON);
+  const inputProps = await processVideoInputProps(videoSchema);
 
   return {
     imageFormat: "jpeg",

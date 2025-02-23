@@ -1,10 +1,9 @@
 import chalk from "chalk";
 import { redisClient, redisWorkerClient } from "../configs/redis";
 import { logger } from "../helpers/logging/logger";
-import { fetchAndUpdateUnlabelImage } from "../helpers/redis/update_unlabel_image";
-import { groupImageByLabel } from "../helpers/images/image_grouping";
 import { renderVideo } from "../helpers/remotion/remotion_render";
 import supabase from "../configs/supabase";
+import { InputPropsType } from "../types/render.type";
 
 // TODO:
 /* WORK WITH REDIS WORKER VIDEO FILE -> NOT THISS FILE !!!!!!!!!!!
@@ -38,7 +37,8 @@ export const redisWorker = async () => {
         return;
 
       // videoLinkStatus === "start" -> start rendering video
-      await Promise.all([
+      const [scaleStr] = await Promise.all([
+        redisClient.hGet(`render:user-${userId}`, "scale"),
         redisClient.set(key, "rendering"),
         supabase
           .from("video_render")
@@ -49,16 +49,27 @@ export const redisWorker = async () => {
           .eq("id", renderQueueId),
       ]);
 
-      // start rendering video
-      const imageLabeled = await fetchAndUpdateUnlabelImage();
-
-      const imageGroupJSON = groupImageByLabel(imageLabeled);
-
       try {
+        // start rendering video
+        // const imageLabeled = await fetchAndUpdateUnlabelImage(renderQueueId);
+        // const imageGroupJSON = groupImageByLabel(imageLabeled);
+
+        const { data } = await supabase
+          .from("video_render")
+          .select("schema")
+          .eq("id", renderQueueId)
+          .single()
+          .throwOnError();
+
+        if (!data?.schema) {
+          throw new Error("Schema is not found. Please request again.");
+        }
+
         const chunkURLs = await renderVideo(
-          imageGroupJSON,
+          data!.schema! as InputPropsType,
           renderQueueId,
-          userId
+          userId,
+          parseInt(scaleStr || "1", 10)
         );
 
         // end rendering video
@@ -69,21 +80,24 @@ export const redisWorker = async () => {
             chunkURLs.join(", ")
           ),
         ]);
+
+        logger.info(
+          `Finish rendering video for ${chalk.blue(`user-${userId}`)} - scale ${chalk.blue(scaleStr)}`
+        );
       } catch (error: unknown) {
         logger.error(`Error rendering: ${(error as Error).message}`);
 
-        await supabase
-          .from("video_render")
-          .update({
-            status: "failed",
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", renderQueueId);
-
-        return;
+        await Promise.all([
+          supabase
+            .from("video_render")
+            .update({
+              status: "failed",
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", renderQueueId),
+          redisClient.del(`render:user-${userId}`),
+        ]);
       }
-
-      logger.info(`Finish rendering video for ${chalk.blue(`user-${userId}`)}`);
     }
   );
 };

@@ -42,13 +42,13 @@ const CaptionLayer = ({
           }}
           className="absolute center flex-col  top-[38px] h-[calc(100%-38px)] w-full px-6 py-8"
         >
-          <h1 className="text-5xl font-bold leading-normal text-center">
+          <h1 className="text-4xl font-bold leading-normal text-center">
             {title && title !== "" ? title : `Event Chapter ${index + 1}`}
           </h1>
 
           <div className="mt-7 flex justify-around flex-wrap w-full">
             {(hashtag && hashtag.length > 0
-              ? hashtag
+              ? hashtag.slice(0, 3)
               : ["good_morning", "sunrise", "beautiful_day", "traveling"]
             ).map((word, index2) => (
               <span key={index2} className="text-xl">

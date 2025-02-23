@@ -1,6 +1,6 @@
 export type SlideCaptionsRequest = {
-  place: string;
-  activitys: string;
+  place: string | string[];
+  activities: string;
   events: string[];
 }[];
 

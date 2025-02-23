@@ -28,7 +28,7 @@ const ChapterContent = ({
       easing:
         transition.type === "self-built" ? undefined : Easing.out(Easing.cubic),
     }),
-    [transition.type],
+    [transition.type]
   );
 
   const generateSequence = useCallback(
@@ -75,7 +75,7 @@ const ChapterContent = ({
         </TransitionSeries.Sequence>
       );
     },
-    [frames, transition, chapterIndex],
+    [frames, transition, chapterIndex]
   );
 
   const generateTransition = useCallback(
@@ -94,7 +94,7 @@ const ChapterContent = ({
       }
       return null;
     },
-    [frames.length, transitionConfig.easing, transitionConfig.presentation],
+    [frames.length, transitionConfig.easing, transitionConfig.presentation]
   );
 
   return (

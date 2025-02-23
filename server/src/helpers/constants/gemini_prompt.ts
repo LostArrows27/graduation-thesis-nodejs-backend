@@ -2,7 +2,7 @@ import { SlideCaptionsRequest } from "../../types/gemini.type";
 
 // chapter[] -> {name, title, hashtag}[]
 export const generateChaptersTitlePrompt = (place_arr: string[]) => {
-  const prompt = `Bạn là một nhà biên kịch sáng tạo, hãy tạo ra những tiêu đề và hashtag cho các chapter trong video recap chuyến đi. Mỗi chapter sẽ có 1 tiêu đề và 2 hashtag. 
+  const prompt = `Bạn là một nhà biên kịch sáng tạo, hãy tạo ra những tiêu đề và hashtag KHÁC NHAU cho các chapter trong video recap chuyến đi. Mỗi chapter sẽ có 1 tiêu đề và 2 hashtag. 
   - Tiêu đề: Tiêu đề cần ngắn gọn, tự nhiên, tối đa 6 từ và hấp dẫn.
   - Hashtag: Mỗi chapter sẽ có 4 hashtag, có thể bằng tiếng Việt hoặc tiếng Anh, nhưng mỗi chapter chỉ sử dụng một ngôn ngữ duy nhất (hoặc toàn bộ tiếng Việt hoặc toàn bộ tiếng Anh). Hashtag cần liên quan đến các yếu tố trong chapter như địa điểm và sự kiện.
   - Hashtag: Nên ở dạng chữ thường và phải dùng dấu "_" để phân cách giữa các từ thay cho dấu cách
@@ -38,7 +38,7 @@ export const generateChaptersTitlePrompt = (place_arr: string[]) => {
 export const generateSlidesCaptionPrompt = (
   slide_req: SlideCaptionsRequest
 ) => {
-  const prompt = `Bạn là một nhà biên kịch sáng tạo, hãy tạo ra những caption tiếng Việt thật tự nhiên, ngắn gọn, mỗi caption không vượt quá 10 từ và hấp dẫn cho các slide ảnh trong video recap chuyến đi. 
+  const prompt = `Bạn là một nhà biên kịch sáng tạo, hãy tạo ra những caption tiếng Việt KHÁC NHAU thật tự nhiên, ngắn gọn và mỗi caption không vượt quá 10 từ, không được giống các caption khác trong danh sách caption cũng như hấp dẫn cho các slide ảnh trong video recap chuyến đi. 
   Input của bạn là mảng thông tin về các slide ảnh, bao gồm:
   - Địa điểm của slide (place).
   - Hoạt động trong slide (activity).

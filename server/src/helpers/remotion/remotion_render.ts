@@ -4,7 +4,6 @@ import { renderMedia, selectComposition } from "@remotion/renderer";
 import { enableTailwind } from "@remotion/tailwind";
 import { logger } from "../logging/logger";
 import { VIDEO_COMPOSITION_ID } from "../../remotion/constants/constants";
-import { ImageJSON } from "../../remotion/types/frame.type";
 import { deleteImagesByUrl } from "../../remotion/utils/transform-image-size";
 import {
   onBundleProgress,
@@ -14,13 +13,14 @@ import {
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import { uploadSplittedVideoToSupabase } from "./handle_video_upload";
+import { InputPropsType } from "../../types/render.type";
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 
 // TODO: could bundled and re-used for multiple render
 export const renderVideo = async (
-  passImageJSON: ImageJSON,
+  videoSchema: InputPropsType,
   renderQueueId: string,
   userID: string,
   scale = 1
@@ -32,7 +32,7 @@ export const renderVideo = async (
   });
 
   const renderOption = await generateRenderOption(
-    passImageJSON,
+    videoSchema,
     renderQueueId,
     scale
   );

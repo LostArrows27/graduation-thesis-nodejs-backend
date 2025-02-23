@@ -17,9 +17,8 @@ export const categorizedImage = async (images: ImageMetaData[]) => {
 };
 
 // Main function
-export const fetchAndUpdateUnlabelImage = async () => {
-  // Fake fetch user images
-  const imagesMetaData = await fetchRenderImage();
+export const fetchAndUpdateUnlabelImage = async (videoRenderId: string) => {
+  const imagesMetaData = await fetchRenderImage(videoRenderId);
 
   const { unlabelImages, relateImages } = groupByLabelStatus(imagesMetaData);
 

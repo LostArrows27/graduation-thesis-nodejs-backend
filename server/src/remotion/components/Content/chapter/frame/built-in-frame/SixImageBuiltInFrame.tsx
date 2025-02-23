@@ -188,7 +188,7 @@ const AssetLayerSix = memo(
                 left: `${400}px`,
                 opacity,
               }}
-              className="absolute w-[340px] left-32 h-[243.1px]"
+              className="absolute w-[380px] left-32 h-[260px]"
             >
               <Img
                 className="object-cover absolute -top-8 -left-8 object-center z-20 rotate-90 w-[100px] h-auto "
@@ -204,7 +204,7 @@ const AssetLayerSix = memo(
                   fontFamily,
                 }}
               >
-                <h1 className="mb-5">{caption}</h1>
+                <h1 className="mb-5 mt-5">{caption}</h1>
                 <div style={{ fontFamily }} className="flex gap-4">
                   {hashtag.map((text, index) => (
                     <span key={index} className="text-2xl">

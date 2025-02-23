@@ -2,7 +2,7 @@ import { ImageJSON } from "../../remotion/types/frame.type";
 import { calculateVideoTimeline } from "../../remotion/utils/calculate-video-timeline";
 import { uploadAndResizeImages } from "../../remotion/utils/transform-image-size";
 import { InputPropsType } from "../../types/render.type";
-import { EXCLUDE_LABELS } from "../constants/constants";
+// import { EXCLUDE_LABELS } from "../constants/constants";
 
 // NOTE: old
 
@@ -24,14 +24,11 @@ export const generateVideoInputSchema = (
 };
 
 export const processVideoInputProps = async (
-  imageJSON: ImageJSON
+  videoSchema: InputPropsType
 ): Promise<InputPropsType> => {
-  const secondSceneImages = selectIntroSecondSceneImages(imageJSON);
-
-  const secondSceneImageResized =
-    await uploadAndResizeImages(secondSceneImages);
-
-  const videoSchema = generateVideoInputSchema(imageJSON);
+  const secondSceneImageResized = await uploadAndResizeImages(
+    videoSchema.introScene.secondScene.images
+  );
 
   videoSchema.introScene.secondScene.images = secondSceneImageResized;
 
@@ -40,11 +37,11 @@ export const processVideoInputProps = async (
 
 export const selectIntroFirstSceneImages = (
   groups: ImageJSON,
-  excluded = EXCLUDE_LABELS,
+  // excluded = EXCLUDE_LABELS,
   count = 4
 ) => {
-  return Object.entries(groups)
-    .filter(([label]) => !excluded.includes(label))
+  const results = Object.entries(groups)
+    // .filter(([label]) => !excluded.includes(label))
     .sort(([, a], [, b]) => b.length - a.length)
     .slice(0, count)
     .map(
@@ -56,6 +53,8 @@ export const selectIntroFirstSceneImages = (
             : best
         ).path
     );
+
+  return results;
 };
 
 export const selectIntroSecondSceneImages = (groups: ImageJSON) => {

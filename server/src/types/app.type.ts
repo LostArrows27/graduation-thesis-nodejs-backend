@@ -8,6 +8,7 @@ export interface AuthUserRequest extends Request {
     accessToken?: string;
     user: User;
     renderQueueId?: string;
+    scale?: number; // 1 / 1.5
   };
 }
 

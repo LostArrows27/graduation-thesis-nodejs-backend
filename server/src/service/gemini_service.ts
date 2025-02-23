@@ -26,7 +26,11 @@ class GeminiService {
         const place =
           frame.category === "event"
             ? chapter.title
-            : Object.keys(frame.images[0]?.labels.location)[0];
+            : Array.from(
+                new Set(
+                  frame.images.map((img) => Object.keys(img.labels.location)[0])
+                )
+              );
         const activities = Array.from(
           new Set(
             frame.images.map((img) => Object.keys(img.labels.activity)[0])
@@ -35,11 +39,15 @@ class GeminiService {
         const events = Array.from(
           new Set(frame.images.map((img) => Object.keys(img.labels.event)[0]))
         );
-        return { place, activitys: activities[0], events };
+        return { place, activities: activities[0], events };
       })
     );
 
     const batchedChapters = [];
+
+    const totalTitles: ChaperTitleHashTagResponse = [];
+    const totalCaptions: string[] = [];
+    const totalHashtags: string[][] = [];
     for (let i = 0; i < videoChapter.length; i += GeminiService.BATCH_SIZE) {
       const batchPlaceArr = place_arr.slice(i, i + GeminiService.BATCH_SIZE);
       const batchSlideReq = slide_req.slice(
@@ -60,43 +68,45 @@ class GeminiService {
         batchHashtagPromise,
       ]);
 
-      console.log("i :>> ", i);
+      totalTitles.push(...batchTitles);
+      totalCaptions.push(...batchCaptions);
+      totalHashtags.push(...batchHashtags);
+
+      console.log("batchSlideReq :>> ", batchSlideReq);
       console.log("batchTitles :>> ", batchTitles);
       console.log("batchCaptions :>> ", batchCaptions);
       console.log("batchHashTags :>> ", batchHashtags);
 
-      batchedChapters.push(
-        ...videoChapter
-          .slice(i, i + GeminiService.BATCH_SIZE)
-          .map((chapter, chapterIndex) => {
-            const chapterTitle = batchTitles[chapterIndex]?.title;
-            const chapterHashtags = batchTitles[chapterIndex]?.hashtags;
-
-            const updatedFrames = chapter.frame.map((frame, frameIndex) => {
-              const caption =
-                batchCaptions[frameIndex + i * GeminiService.BATCH_SIZE];
-              const slideHashtags =
-                batchHashtags[frameIndex + i * GeminiService.BATCH_SIZE] || [];
-
-              return {
-                ...frame,
-                caption,
-                hashtag: slideHashtags,
-              };
-            });
-
-            return {
-              ...chapter,
-              title: chapterTitle || chapter.title,
-              hashtag: chapterHashtags || [],
-              frame: updatedFrames,
-            };
-          })
-      );
-
       if (i + GeminiService.BATCH_SIZE < videoChapter.length) {
         await wait(GeminiService.BATCH_DELAY);
       }
+    }
+
+    // map the titles, captions, and hashtags to the chapters
+    let frameIndex = 0;
+    for (let i = 0; i < videoChapter.length; i++) {
+      const chapterTitle = totalTitles[i]?.title;
+      const chapterHashtags = totalTitles[i]?.hashtags;
+
+      const updatedFrames = videoChapter[i].frame.map((frame) => {
+        const caption = totalCaptions[frameIndex];
+        const slideHashtags = totalHashtags[frameIndex] || [];
+
+        frameIndex++;
+
+        return {
+          ...frame,
+          caption,
+          hashtag: slideHashtags,
+        };
+      });
+
+      batchedChapters.push({
+        ...videoChapter[i],
+        title: chapterTitle || videoChapter[i].title,
+        hashtag: chapterHashtags || [],
+        frame: updatedFrames,
+      });
     }
 
     return batchedChapters;

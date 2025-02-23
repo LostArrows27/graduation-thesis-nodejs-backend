@@ -47,26 +47,38 @@ const uploadChunksToSupabase = async (
   renderQueueId: string,
   userID: string
 ) => {
-  const files = fs.readdirSync(outputDir);
-  const uploadPromises = files.map((file, index) => {
-    const filePath = path.join(outputDir, file);
-    const supabasePath = `${userID}/${renderQueueId}/chunks_${index}.mp4`;
-    return supabase.storage
-      .from("video_render")
-      .upload(supabasePath, fs.createReadStream(filePath), {
-        contentType: "video/mp4",
-        duplex: "half",
-      })
-      .then(({ data, error }) => {
-        if (error) {
-          throw new Error(`Upload failed: ${error.name} - ${error.message}`);
-        }
+  try {
+    const files = fs.readdirSync(outputDir);
 
-        return supabase.storage.from("video_render").getPublicUrl(data.path)
-          .data.publicUrl;
+    const uploadPromises = files.map(async (file, index) => {
+      const filePath = path.join(outputDir, file);
+      const supabasePath = `${userID}/${renderQueueId}/chunks_${index}.mp4`;
+      const { data, error } = await supabase.storage
+        .from("chunk_storage")
+        .upload(supabasePath, fs.createReadStream(filePath), {
+          contentType: "video/mp4",
+          duplex: "half",
+        });
+
+      if (error || !data) {
+        throw new Error(`Upload failed: ${error.name} - ${error.message}`);
+      }
+
+      await supabase.from("video_chunk").insert({
+        video_id: renderQueueId,
+        chunk_name: data.path,
+        chunk_bucket_id: "chunk_storage",
+        order: index,
       });
-  });
-  return Promise.all(uploadPromises);
+
+      return supabase.storage.from("chunk_storage").getPublicUrl(data.path).data
+        .publicUrl;
+    });
+    return Promise.all(uploadPromises);
+  } catch (error) {
+    logger.error(`Error uploading chunks: ${(error as Error).message}`);
+    throw new Error("Error uploading chunks");
+  }
 };
 
 // Delete files and directories
@@ -97,14 +109,13 @@ export const uploadSplittedVideoToSupabase = async (
     outputDir,
     renderQueueId,
     userID
-  ); // Upload chunks to Supabase
+  );
 
   const { error } = await supabase
     .from("video_render")
     .update({
       status: "completed",
       updated_at: new Date().toISOString(),
-      url: uploadUrls.join(", "),
     })
     .eq("id", renderQueueId);
 

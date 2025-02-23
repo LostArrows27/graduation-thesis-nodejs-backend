@@ -91,7 +91,9 @@ export const RemotionRoot: React.FC = () => {
         width={VIDEO_WIDTH}
         height={VIDEO_HEIGHT}
         calculateMetadata={calculateMetadata}
-        defaultProps={generateDefaultVideoProps(new Date("2024-04-02"))}
+        defaultProps={
+          generateDefaultVideoProps(new Date("2024-04-02")) as MainProps
+        }
       />
     </>
   );

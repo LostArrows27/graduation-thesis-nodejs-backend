@@ -10,10 +10,15 @@ export const checkVideoParamsMiddelware = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const { renderQueueId } = req.body;
+  const { renderQueueId, scale } = req.body;
 
   if (!renderQueueId) {
     res.status(400).json({ error: "renderQueueId is required" });
+    return;
+  }
+
+  if (scale && ![1, 1.5].includes(scale)) {
+    res.status(400).json({ error: "Invalid scale" });
     return;
   }
 
@@ -25,6 +30,11 @@ export const checkVideoParamsMiddelware = async (
 
   if (!data) {
     res.status(400).json({ error: "Invalid renderQueueId" });
+    return;
+  }
+
+  if (data.request_user_id !== req.body.user.id) {
+    res.status(403).json({ error: "User does not have permission" });
     return;
   }
 

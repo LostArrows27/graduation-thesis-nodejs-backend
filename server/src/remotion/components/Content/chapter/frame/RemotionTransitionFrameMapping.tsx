@@ -124,7 +124,7 @@ const RemotionTransitionFrameMapping = ({
 
     default:
       return (
-        <TwoImageBuiltInTransition
+        <SixImageBuiltInFrame
           frame={frame}
           inTiming={inTiming}
           outTiming={outTiming}
