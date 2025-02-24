@@ -15,15 +15,25 @@ export type RenderVideoOptions = Omit<
 
 export type InputPropsType = {
   type: RenderType;
+  videoDate: string;
   introScene: {
     firstScene: {
       images: string[];
+      title: string;
     };
     secondScene: {
       images: string[];
     };
   };
   contentScene: ChapterWithDuration[];
+  // editable props -> refers to video.schema.ts
+  bgMusic: string;
+  bgVideo: {
+    src: string;
+    frameLength: number;
+  };
+  titleStyle: number;
+  maxDuration?: number;
 };
 
 // NOTE: all props that user can modify !

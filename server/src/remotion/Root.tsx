@@ -21,10 +21,10 @@ import { chooseIntroTitle } from "./utils/choose-intro-title";
 import { getRandomAssetByDate } from "./utils/seasonal-helper";
 import { chooseRandomCaption } from "./assets/caption_assets";
 import { getVideoMetadata } from "@remotion/media-utils";
-import { calculateVideoDuration } from "./utils/calculate-video-timeline";
 import { chooseRandomOutroImage } from "./utils/choose-random-outro-image";
 import { chooseRandomOutroCaption } from "./utils/choose-random-outro-caption";
 import { generateDefaultVideoProps } from "./constants/video-props";
+import { chooseChapterBasedOnMaxDuration } from "./utils/choose-chapter-based-on-max-duration";
 
 // TODO: upload image to cloudinary -> resize -> finish delete
 
@@ -38,12 +38,11 @@ import { generateDefaultVideoProps } from "./constants/video-props";
 const calculateMetadata: CalculateMetadataFunction<MainProps> = async ({
   props,
 }) => {
-  const bgMusic = chooseIntroMusic();
+  const videoDate = new Date(props.videoDate);
+
   const bgVideoSrc = staticFile(
-    getRandomAssetByDate(props.videoDate, "videos")
+    props?.bgVideo?.src || getRandomAssetByDate(videoDate, "videos")
   );
-  const title = chooseIntroTitle(props.videoDate);
-  const captions = chooseRandomCaption();
 
   const { durationInSeconds } = await getVideoMetadata(bgVideoSrc);
 
@@ -51,27 +50,28 @@ const calculateMetadata: CalculateMetadataFunction<MainProps> = async ({
     throw new Error("Cannot get video metadata");
   }
 
-  const videoContentDuration = calculateVideoDuration(props.contentScene);
+  const { chapters, contentTotalDuration } = chooseChapterBasedOnMaxDuration(
+    props.contentScene,
+    props?.maxDuration
+  );
 
-  const outroImage = chooseRandomOutroImage(props.contentScene); // TODO: choose group image with max members instead
+  const captions = chooseRandomCaption();
 
-  const outroCaption = chooseRandomOutroCaption();
-
-  const totalDurationInFrames =
-    INTRO_SCENE_LENGTH + videoContentDuration + OUTRO_SCENE_LENGTH;
-
-  const titleStyle = Math.floor(random(null) * 2);
-
-  props.bgMusic = bgMusic;
+  props.bgMusic = props?.bgMusic || chooseIntroMusic();
   props.bgVideo.src = bgVideoSrc;
   props.bgVideo.frameLength = durationInSeconds * VIDEO_FPS;
-  props.introScene.firstScene.title = title;
+  props.introScene.firstScene.title =
+    props?.introScene?.firstScene?.title || chooseIntroTitle(videoDate);
   props.introScene.secondScene.firstCaption = captions.firstCaption;
   props.introScene.secondScene.secondCaption = captions.secondCaption;
-  props.contentLength = videoContentDuration;
-  props.titleStyle = titleStyle;
-  props.outroScene.image = outroImage;
-  props.outroScene.caption = outroCaption;
+  props.contentLength = contentTotalDuration;
+  props.contentScene = chapters;
+  props.titleStyle = props?.titleStyle || Math.floor(random(null) * 2);
+  props.outroScene.image = chooseRandomOutroImage(props.contentScene); // TODO: choose group image with max members instead
+  props.outroScene.caption = chooseRandomOutroCaption();
+
+  const totalDurationInFrames =
+    INTRO_SCENE_LENGTH + contentTotalDuration + OUTRO_SCENE_LENGTH;
 
   return {
     durationInFrames: totalDurationInFrames,

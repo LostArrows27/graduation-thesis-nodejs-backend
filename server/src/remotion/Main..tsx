@@ -24,7 +24,7 @@ const MainVideo = ({
           <IntroScene
             firstScene={{
               ...introScene.firstScene,
-              time: videoDate,
+              time: new Date(videoDate),
             }}
             secondScene={introScene.secondScene}
           />

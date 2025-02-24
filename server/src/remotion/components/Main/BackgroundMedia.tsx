@@ -1,4 +1,4 @@
-import { useVideoConfig } from "remotion";
+import { staticFile, useVideoConfig } from "remotion";
 import { interpolate } from "remotion";
 import { Audio } from "remotion";
 import { Loop, OffthreadVideo } from "remotion";
@@ -35,7 +35,7 @@ const BackgroundMedia = ({ bgMusic, bgVideo }: BackgroundMediaProps) => {
       <Audio
         loop
         loopVolumeCurveBehavior="extend"
-        src={bgMusic}
+        src={staticFile(bgMusic)}
         volume={(frame) =>
           interpolate(
             frame,
@@ -47,7 +47,7 @@ const BackgroundMedia = ({ bgMusic, bgVideo }: BackgroundMediaProps) => {
               durationInFrames,
             ],
             [0, AUDIO_VOLUME, AUDIO_VOLUME, 0, 0],
-            { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
+            { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
           )
         }
       />

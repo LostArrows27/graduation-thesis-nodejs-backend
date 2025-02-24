@@ -38,7 +38,7 @@ export const introSceneSchema = z.object({
 export const compositionSchema = z.object({
   type: z.enum(["dev", "prod"]),
   contentLength: z.number(),
-  videoDate: z.date(),
+  videoDate: z.union([z.string(), z.date()]),
   introScene: introSceneSchema,
   contentScene: contentSceneSchema,
   outroScene: z.object({
@@ -51,4 +51,5 @@ export const compositionSchema = z.object({
     frameLength: z.number(),
   }),
   titleStyle: z.number(),
+  maxDuration: z.number().optional(),
 });

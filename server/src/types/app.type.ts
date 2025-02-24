@@ -1,7 +1,12 @@
 import { User } from "@supabase/supabase-js";
 import { Request } from "express";
-import { videoOptionSchema, videoTheme } from "../schema/video_option.schema";
+import {
+  videoEditSchema,
+  videoOptionSchema,
+  videoTheme,
+} from "../schema/video_option.schema";
 import { z } from "zod";
+import { InputPropsType } from "./render.type";
 
 export interface AuthUserRequest extends Request {
   body: {
@@ -17,6 +22,15 @@ export interface CreateSchemaRequest extends AuthUserRequest {
     imageIdList: string[] | undefined;
   };
 }
+
+export interface EditSchemaRequest extends AuthUserRequest {
+  body: AuthUserRequest["body"] & {
+    option: SchemaEditOption;
+    schema?: InputPropsType;
+  };
+}
+
+export type SchemaEditOption = z.infer<typeof videoEditSchema>;
 
 export type VideoTheme = z.infer<typeof videoTheme>;
 

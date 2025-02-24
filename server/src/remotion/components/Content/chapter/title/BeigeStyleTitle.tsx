@@ -133,7 +133,7 @@ const BeigeStyleTitle = ({
             style={{
               fontFamily: titleFontFamily,
             }}
-            className="w-[550px]  justify-between px-5 pr-10 pl-10 items-center pb-5 flex absolute right-36 top-[64%] h-[130px]"
+            className="w-[550px]  justify-between px-5 pr-20 pl-10 items-center pb-5 flex absolute right-36 top-[64%] h-[130px]"
           >
             {(hashtag && hashtag.length >= 2
               ? hashtag.slice(0, 2)

@@ -39,7 +39,7 @@ export const checkVideoParamsMiddelware = async (
   }
 
   logger.info(
-    `User ${chalk.blue(req.body.user.email?.split("@")[0])} request create schema.`
+    `User ${chalk.blue(req.body.user.email?.split("@")[0])} request create video.`
   );
 
   next();

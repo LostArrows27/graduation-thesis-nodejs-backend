@@ -62,9 +62,9 @@ export const Layout = memo(
           <ChapterGraphic chapterIndex={chapterIndex} />
         </AbsoluteFill>
         <AbsoluteFill>
-          <div className="w-full center h-[200px] tracking-[0.15em] text-6xl absolute top-0 right-0 left-0">
+          <div className="w-full center h-[200px] tracking-[0.15em] text-5xl absolute top-0 right-0 left-0">
             <h1
-              className="uppercase font-bold text-center text-[rgb(93,69,45)]"
+              className="uppercase font-black text-center text-[rgb(93,69,45)]"
               style={{
                 fontFamily: titleFontFamily,
               }}
