@@ -8,9 +8,9 @@ import { checkVideoParamsMiddelware } from "../middlewares/check_create_video_pa
 import chalk from "chalk";
 import supabase from "../configs/supabase";
 
-const videoRouter = express.Router();
+const videoRenderRouter = express.Router();
 
-videoRouter.post(
+videoRenderRouter.post(
   "/create-video",
   checkAccessToken,
   checkVideoParamsMiddelware,
@@ -99,7 +99,7 @@ videoRouter.post(
   }
 );
 
-export default videoRouter;
+export default videoRenderRouter;
 
 /* A USER CAN ONLY REQUEST 1 VIDEO AT A TIME
 
