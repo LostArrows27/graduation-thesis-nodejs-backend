@@ -16,6 +16,7 @@ import {
   getSeasonFromDate,
 } from "../remotion/utils/seasonal-helper";
 import { fromSeasonToDate } from "../helpers/timer/from_season_to_date";
+import { renderVideoThumbnail } from "../helpers/remotion/remotion_render";
 
 const schemaRouter = express.Router();
 
@@ -26,7 +27,7 @@ schemaRouter.post(
   async (req: CreateSchemaRequest, res: Response) => {
     try {
       // delete old image queue + add imageIdList -> video_image
-      const { imageIdList, renderQueueId } = req.body;
+      const { imageIdList, renderQueueId, user } = req.body;
 
       await supabase
         .from("video_image")
@@ -66,9 +67,10 @@ schemaRouter.post(
 
       const videoSchema = generateVideoInputSchema(imageJSON);
 
-      const contentWithAICaption = await GeminiService.generateCaptionForVideo(
-        videoSchema.contentScene
-      );
+      const [contentWithAICaption, thumbnailUrl] = await Promise.all([
+        GeminiService.generateCaptionForVideo(videoSchema.contentScene),
+        renderVideoThumbnail(videoSchema, renderQueueId!, user.id),
+      ]);
 
       videoSchema.contentScene = contentWithAICaption;
 
@@ -76,6 +78,7 @@ schemaRouter.post(
         .from("video_render")
         .update({
           schema: videoSchema,
+          thumbnail_url: thumbnailUrl,
         })
         .eq("id", renderQueueId!)
         .throwOnError();
@@ -94,6 +97,7 @@ schemaRouter.post(
         bgMusic: videoSchema.bgMusic,
         bgVideoTheme: getSeasonFromDate(new Date(Date.now())),
         maxDuration: videoSchema.maxDuration,
+        thumbnailUrl,
       };
 
       res
