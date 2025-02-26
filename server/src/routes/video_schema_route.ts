@@ -11,7 +11,10 @@ import { generateVideoInputSchema } from "../helpers/remotion/process_video_inpu
 import { categorizedImage } from "../helpers/redis/update_unlabel_image";
 import GeminiService from "../service/gemini_service";
 import { checkEditSchemaParamsMiddleware } from "../middlewares/check_edit_schema_params_middleware";
-import { getRandomAssetByDate } from "../remotion/utils/seasonal-helper";
+import {
+  getRandomAssetByDate,
+  getSeasonFromDate,
+} from "../remotion/utils/seasonal-helper";
 import { fromSeasonToDate } from "../helpers/timer/from_season_to_date";
 
 const schemaRouter = express.Router();
@@ -77,9 +80,25 @@ schemaRouter.post(
         .eq("id", renderQueueId!)
         .throwOnError();
 
+      // final String videoRenderId;
+      // final String videoTitle;
+      // final int titleStyle;
+      // final String bgMusic;
+      // final String bgVideoTheme;
+      // final int maxDuration;
+
+      const returnData = {
+        videoRenderId: renderQueueId,
+        videoTitle: videoSchema.introScene.firstScene.title,
+        titleStyle: videoSchema.titleStyle,
+        bgMusic: videoSchema.bgMusic,
+        bgVideoTheme: getSeasonFromDate(new Date(Date.now())),
+        maxDuration: videoSchema.maxDuration,
+      };
+
       res
         .status(200)
-        .json({ message: "Schema created successfully", data: videoSchema });
+        .json({ message: "Schema created successfully", data: returnData });
     } catch (error: unknown) {
       logger.error(`Error creating schema: ${(error as Error).message}`);
       logger.error(`Stack ${(error as Error).stack}`);
@@ -113,9 +132,18 @@ schemaRouter.post(
         .eq("id", renderQueueId!)
         .throwOnError();
 
+      const returnData = {
+        videoRenderId: renderQueueId,
+        videoTitle: schema!.introScene.firstScene.title,
+        titleStyle: schema!.titleStyle,
+        bgMusic: schema!.bgMusic,
+        bgVideoTheme: option.bgVideoTheme,
+        maxDuration: schema!.maxDuration,
+      };
+
       res
         .status(200)
-        .json({ message: "Schema edited successfully", data: schema });
+        .json({ message: "Schema edited successfully", data: returnData });
     } catch (error: unknown) {
       logger.error(`Error editing schema: ${(error as Error).message}`);
       logger.error(`Stack ${(error as Error).stack}`);

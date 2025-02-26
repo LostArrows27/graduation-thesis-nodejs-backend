@@ -2,7 +2,7 @@ import { random } from "remotion";
 import { seasonAssets } from "../assets/seasonal_assets";
 import { Season, AssetsType, Asset } from "../types/asset.type";
 
-const getSeasonFromDate = (date: Date): Season => {
+export const getSeasonFromDate = (date: Date): Season => {
   const year = date.getFullYear();
   const seasons = [
     { name: "spring", start: new Date(year, 2, 20) }, // March 20th
@@ -23,7 +23,7 @@ const getSeasonFromDate = (date: Date): Season => {
 
 export const getSeasonalAssetsBySeason = (
   season: Season,
-  assetType: AssetsType,
+  assetType: AssetsType
 ): string[] => {
   if (seasonAssets[season][assetType]) return seasonAssets[season][assetType];
   return [];
@@ -31,7 +31,7 @@ export const getSeasonalAssetsBySeason = (
 
 export const getSeasonalAssetsByDate = (
   date: Date,
-  assetType: AssetsType,
+  assetType: AssetsType
 ): string[] => {
   const season = getSeasonFromDate(date);
   return seasonAssets[season][assetType] || [];
@@ -43,7 +43,7 @@ export const getAllAssetsBySeason = (season: Season): Asset => {
 
 export const getRandomAssetByDate = (
   date: Date,
-  assetType: AssetsType,
+  assetType: AssetsType
 ): string => {
   const season = getSeasonFromDate(date);
   const assets = getSeasonalAssetsBySeason(season, assetType);

@@ -13,7 +13,6 @@ import { InputPropsType } from "../../types/render.type";
 export const generateVideoInputSchema = (
   imageJSON: ImageJSON
 ): InputPropsType => {
-  // TODO: add max duration props and adjust timeline
   const videoDate = new Date(Date.now());
 
   return {
