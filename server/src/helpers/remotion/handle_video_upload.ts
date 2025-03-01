@@ -4,6 +4,7 @@ import path, { dirname } from "path";
 import supabase from "../../configs/supabase";
 import { fileURLToPath } from "url";
 import { logger } from "../logging/logger";
+import { v4 as uuidv4 } from "uuid";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -50,10 +51,12 @@ const uploadChunksToSupabase = async (
   try {
     const files = fs.readdirSync(outputDir);
 
+    const uuid = uuidv4();
+
     const uploadPromises = files.map(async (file) => {
       const filePath = path.join(outputDir, file);
       const fileName = file.split("/").pop();
-      const supabasePath = `${userID}/${renderQueueId}/${fileName}`;
+      const supabasePath = `${userID}/${renderQueueId}/${uuid}/${fileName}`;
       const contentType =
         file.split(".").pop() === "m3u8"
           ? "application/vnd.apple.mpegurl"
