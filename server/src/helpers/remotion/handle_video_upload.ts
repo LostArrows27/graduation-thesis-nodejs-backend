@@ -25,16 +25,16 @@ const ensureFileExists = (filePath: string) => {
 // Split video into chunks
 const splitVideoIntoChunks = (inputPath: string, outputDir: string) => {
   return new Promise((resolve, reject) => {
+    // ffmpeg -i test.mp4 -profile:v baseline -level 3.0 -hls_time 10 -hls_list_size 0 -f hls output.m3u8
     ffmpeg(inputPath)
       .outputOptions([
-        "-c copy",
-        "-map 0",
-        "-segment_time 00:00:30",
-        "-force_key_frames expr:gte(t,n_forced*1)",
-        "-f segment",
-        "-reset_timestamps 1",
+        "-profile:v baseline", // Use baseline profile for compatibility
+        "-level 3.0", // Set H.264 encoding level
+        "-hls_time 10", // Segment length in seconds
+        "-hls_list_size 0", // Set list size to 0 (all segments in playlist)
+        "-f hls", // Output format is HLS
       ])
-      .output(path.join(outputDir, "output%03d.mp4"))
+      .output(path.join(outputDir, "output.m3u8")) // Output playlist file (m3u8)
       .on("end", resolve)
       .on("error", reject)
       .run();
@@ -50,13 +50,19 @@ const uploadChunksToSupabase = async (
   try {
     const files = fs.readdirSync(outputDir);
 
-    const uploadPromises = files.map(async (file, index) => {
+    const uploadPromises = files.map(async (file) => {
       const filePath = path.join(outputDir, file);
-      const supabasePath = `${userID}/${renderQueueId}/chunks_${index}.mp4`;
+      const fileName = file.split("/").pop();
+      const supabasePath = `${userID}/${renderQueueId}/${fileName}`;
+      const contentType =
+        file.split(".").pop() === "m3u8"
+          ? "application/vnd.apple.mpegurl"
+          : "video/mp2t";
+
       const { data, error } = await supabase.storage
         .from("chunk_storage")
         .upload(supabasePath, fs.createReadStream(filePath), {
-          contentType: "video/mp4",
+          contentType,
           duplex: "half",
         });
 
@@ -64,17 +70,24 @@ const uploadChunksToSupabase = async (
         throw new Error(`Upload failed: ${error.name} - ${error.message}`);
       }
 
-      await supabase.from("video_chunk").insert({
-        video_id: renderQueueId,
-        chunk_name: data.path,
-        chunk_bucket_id: "chunk_storage",
-        order: index,
-      });
+      // only need to upload the m3u8 file to the database
+      if (contentType === "application/vnd.apple.mpegurl") {
+        await supabase.from("video_chunk").insert({
+          video_id: renderQueueId,
+          chunk_name: data.path,
+          chunk_bucket_id: "chunk_storage",
+        });
 
-      return supabase.storage.from("chunk_storage").getPublicUrl(data.path).data
-        .publicUrl;
+        return supabase.storage.from("chunk_storage").getPublicUrl(data.path)
+          .data.publicUrl;
+      }
+
+      return null;
     });
-    return Promise.all(uploadPromises);
+
+    const results = await Promise.all(uploadPromises);
+
+    return results.filter((result: string | null) => result !== null);
   } catch (error) {
     logger.error(`Error uploading chunks: ${(error as Error).message}`);
     throw new Error("Error uploading chunks");
@@ -130,4 +143,5 @@ export const uploadSplittedVideoToSupabase = async (
   await deleteFilesAndDirectory([...chunkFiles, videoPath], outputDir); // Delete chunk files, original video file, and chunks directory
 
   return uploadUrls; // Return array of upload URLs
+  // return [];
 };

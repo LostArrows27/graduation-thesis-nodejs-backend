@@ -55,7 +55,7 @@ export const selectIntroFirstSceneImages = (
   // excluded = EXCLUDE_LABELS,
   count = 4
 ) => {
-  const results = Object.entries(groups)
+  const bestImages = Object.entries(groups)
     // .filter(([label]) => !excluded.includes(label))
     .sort(([, a], [, b]) => b.length - a.length)
     .slice(0, count)
@@ -69,7 +69,20 @@ export const selectIntroFirstSceneImages = (
         ).path
     );
 
-  return results;
+  // If there are fewer than 4 images, fill the remaining slots with random images
+  if (bestImages.length < count) {
+    const allImages = Object.values(groups).flat();
+    const remainingImages = allImages
+      .filter((img) => !bestImages.includes(img.path))
+      // eslint-disable-next-line @remotion/deterministic-randomness
+      .sort(() => Math.random() - 0.5)
+      .slice(0, count - bestImages.length)
+      .map((img) => img.path);
+
+    bestImages.push(...remainingImages);
+  }
+
+  return bestImages;
 };
 
 export const selectIntroSecondSceneImages = (groups: ImageJSON) => {

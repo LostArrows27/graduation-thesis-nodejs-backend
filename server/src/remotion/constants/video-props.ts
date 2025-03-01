@@ -16,7 +16,7 @@ export const generateDefaultVideoProps = (fakeDate: Date) => {
     },
     introScene: {
       firstScene: {
-        title: "Our Trip Recap",
+        title: "Our Vacation Recap",
         time: fakeDate,
         images: Array.from({ length: 4 }, (_, i) => {
           return staticFile(`/images/intro/first/first_scene_${i + 1}.jpg`);
@@ -675,10 +675,10 @@ export const generateDefaultVideoProps = (fakeDate: Date) => {
     ],
     bgMusic: "/music/intro/happy_5.mp3",
     bgVideo: {
-      src: "/videos/season_bg/winter/winter_1.mp4",
+      src: "/videos/season_bg/summer/summer_2.mp4",
       frameLength: 0,
     },
-    videoDate: "2025-02-24T03:44:58.207Z",
+    videoDate: "2025-07-24T03:44:58.207Z",
     titleStyle: 0,
     // contentScene: calculateVideoTimeline(imageJSON).map(
     //   (chapterWithDuration) => {

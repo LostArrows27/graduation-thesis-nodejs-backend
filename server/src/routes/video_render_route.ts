@@ -40,7 +40,12 @@ videoRenderRouter.post(
           .select("chunk_name, chunk_bucket_id")
           .eq("video_id", renderQueueId!)
           .throwOnError(),
-        supabase.from("video_render").select("status").single().throwOnError(),
+        supabase
+          .from("video_render")
+          .select("status")
+          .eq("id", renderQueueId!)
+          .single()
+          .throwOnError(),
       ]);
 
       if (data && data.length > 0 && statusData?.status === "completed") {

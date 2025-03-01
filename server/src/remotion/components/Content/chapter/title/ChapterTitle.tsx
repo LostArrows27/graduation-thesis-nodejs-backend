@@ -29,11 +29,32 @@ const ChapterTitle = ({
 
   switch (titleStyle) {
     case 0:
-      return <PaperStyleTitle hashtag={hashtag} title={title} images={images} index={index} />;
+      return (
+        <PaperStyleTitle
+          hashtag={hashtag}
+          title={title}
+          images={images}
+          index={index}
+        />
+      );
     case 1:
-      return <BeigeStyleTitle hashtag={hashtag} title={title} images={images} index={index} />;
+      return (
+        <BeigeStyleTitle
+          hashtag={hashtag}
+          title={title}
+          images={images}
+          index={index}
+        />
+      );
     default:
-      return <BeigeStyleTitle hashtag={hashtag} title={title} images={images} index={index} />;
+      return (
+        <BeigeStyleTitle
+          hashtag={hashtag}
+          title={title}
+          images={images}
+          index={index}
+        />
+      );
   }
 };
 
