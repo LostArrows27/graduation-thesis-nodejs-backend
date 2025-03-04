@@ -115,6 +115,7 @@ export async function waitForImageLabelingJobDone(
           album_id: "album_id",
           updated_at: new Date().toISOString(),
           created_at: new Date().toISOString(),
+          description: "description",
         };
 
         return [];
