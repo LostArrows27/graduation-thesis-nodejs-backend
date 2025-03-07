@@ -101,7 +101,7 @@ export const OUTRO_SECOND_CAPTION_DELAY = 0.7 * VIDEO_FPS;
 export const outroAssetPath = "/images/outro/";
 
 // special part
-export const SPECIAL_PART_LENGTH = 23.7 * VIDEO_FPS;
+export const SPECIAL_PART_LENGTH = 22.7 * VIDEO_FPS;
 export const SPECIAL_PART_FADE_IN_TIME = 0.5 * VIDEO_FPS;
 export const SPECIAL_PART_FADE_OUT_TIME = 0.7 * VIDEO_FPS;
 
@@ -154,6 +154,6 @@ export const LEADERBOARD_AVATAR_APPEAR_DURATION = 0.5 * VIDEO_FPS;
 
 export const LEADERBOARD_AVATAR_GAP_DURATION = 0.2 * VIDEO_FPS;
 
-export const LEADERBOARD_ASSET_MOVE_OUT_TIME = 7.1 * VIDEO_FPS;
+export const LEADERBOARD_ASSET_MOVE_OUT_TIME = 6.1 * VIDEO_FPS;
 
 export const LEADERBOARD_ASSET_MOVE_OUT_DURATION = 0.7 * VIDEO_FPS;

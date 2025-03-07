@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Img } from "remotion";
+import { continueRender, delayRender, Img } from "remotion";
+import {
+  getDimensionsFromStorage,
+  saveDimensionsToStorage,
+} from "../../utils/get-dimension-from-storage";
 
-interface CroppedImageProps {
+export interface CroppedImageProps {
   imageURL: string;
   coordinate: [number, number, number, number]; // [top, right, bottom, left]
   containerWidth?: number; // Optional fixed container width
@@ -20,20 +24,38 @@ const CroppedImage: React.FC<CroppedImageProps> = ({
     width: number;
     height: number;
   } | null>(null);
-  
+
+  const [handle] = useState(() =>
+    delayRender(`Fetch ${imageURL}...`, {
+      retries: 1,
+    })
+  );
+
   // Get original image dimensions
   useEffect(() => {
     if (imageURL) {
+      const cachedDimensions = getDimensionsFromStorage(imageURL);
+
+      if (cachedDimensions) {
+        setOriginalDimensions(cachedDimensions);
+        continueRender(handle);
+        return;
+      }
+
       const img = new Image();
       img.onload = () => {
-        setOriginalDimensions({
+        const dimensions = {
           width: img.naturalWidth,
           height: img.naturalHeight,
-        });
+        };
+        setOriginalDimensions(dimensions);
+        saveDimensionsToStorage(imageURL, dimensions);
+        continueRender(handle);
       };
+
       img.src = imageURL;
     }
-  }, [imageURL]);
+  }, [handle, imageURL]);
 
   if (!originalDimensions) {
     return <div>Loading...</div>;
@@ -41,37 +63,43 @@ const CroppedImage: React.FC<CroppedImageProps> = ({
 
   // Original crop coordinates
   const [top, right, bottom, left] = coordinate;
-  
+
   // Calculate original crop dimensions
   const originalCropWidth = right - left;
   const originalCropHeight = bottom - top;
-  
+
   // Calculate the center point of the crop area
   const centerX = left + originalCropWidth / 2;
   const centerY = top + originalCropHeight / 2;
-  
+
   // Calculate expanded dimensions
   const expandedWidth = originalCropWidth * expansionFactor;
   const expandedHeight = originalCropHeight * expansionFactor;
-  
+
   // Calculate new coordinates based on expanded dimensions and center point
   const newLeft = Math.max(0, centerX - expandedWidth / 2);
   const newTop = Math.max(0, centerY - expandedHeight / 2);
-  const newRight = Math.min(originalDimensions.width, centerX + expandedWidth / 2);
-  const newBottom = Math.min(originalDimensions.height, centerY + expandedHeight / 2);
-  
+  const newRight = Math.min(
+    originalDimensions.width,
+    centerX + expandedWidth / 2
+  );
+  const newBottom = Math.min(
+    originalDimensions.height,
+    centerY + expandedHeight / 2
+  );
+
   // Re-adjust to maintain aspect ratio if needed
   const finalCropWidth = newRight - newLeft;
   const finalCropHeight = newBottom - newTop;
-  
+
   // Use container dimensions or crop dimensions
   const displayWidth = containerWidth || finalCropWidth;
   const displayHeight = containerHeight || finalCropHeight;
-  
+
   // Calculate scale factors
   const scaleX = displayWidth / finalCropWidth;
   const scaleY = displayHeight / finalCropHeight;
-  
+
   const cropStyle: React.CSSProperties = {
     position: "relative",
     overflow: "hidden",
