@@ -8,6 +8,7 @@ import {
 import {
   INTRO_SCENE_LENGTH,
   OUTRO_SCENE_LENGTH,
+  SPECIAL_PART_LENGTH,
   VIDEO_COMPOSITION_ID,
   VIDEO_FPS,
   VIDEO_HEIGHT,
@@ -67,11 +68,14 @@ const calculateMetadata: CalculateMetadataFunction<MainProps> = async ({
   props.contentLength = contentTotalDuration;
   props.contentScene = chapters;
   props.titleStyle = props?.titleStyle || Math.floor(random(null) * 2);
-  props.outroScene.image = chooseRandomOutroImage(props.contentScene); // TODO: choose group image with max members instead
+  props.outroScene.image = await chooseRandomOutroImage(props.contentScene);
   props.outroScene.caption = chooseRandomOutroCaption();
 
   const totalDurationInFrames =
-    INTRO_SCENE_LENGTH + contentTotalDuration + OUTRO_SCENE_LENGTH;
+    INTRO_SCENE_LENGTH +
+    contentTotalDuration +
+    SPECIAL_PART_LENGTH +
+    OUTRO_SCENE_LENGTH;
 
   return {
     durationInFrames: totalDurationInFrames,

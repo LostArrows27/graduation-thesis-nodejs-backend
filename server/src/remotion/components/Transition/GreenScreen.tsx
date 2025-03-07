@@ -8,7 +8,8 @@ import {
 
 export const Greenscreen: React.FC<{
   opacity: number;
-}> = ({ opacity }) => {
+  videoSrc: string;
+}> = ({ opacity, videoSrc }) => {
   const canvas = useRef<HTMLCanvasElement>(null);
   const { width, height } = useVideoConfig();
 
@@ -39,15 +40,16 @@ export const Greenscreen: React.FC<{
       }
       context.putImageData(imageFrame, 0, 0);
     },
-    [height, width],
+    [height, opacity, width]
   );
 
   return (
     <AbsoluteFill>
       <AbsoluteFill>
         <OffthreadVideo
+          playbackRate={2}
           style={{ opacity: 0 }}
-          src={staticFile("/videos/transitions/book.mp4")}
+          src={staticFile(videoSrc)}
           onVideoFrame={onVideoFrame}
         />
       </AbsoluteFill>

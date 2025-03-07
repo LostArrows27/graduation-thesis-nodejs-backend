@@ -1,11 +1,11 @@
 import { random } from "remotion";
 import { ChapterWithDuration } from "../types/frame.type";
 
-export function chooseRandomOutroImage(
+// TODO: choose group image with max members instead
+export async function chooseRandomOutroImage(
   chaptersWithDuration: ChapterWithDuration[]
-): string[] {
+): Promise<string[]> {
   const allImagePaths: string[] = [];
-
   chaptersWithDuration.forEach((chapter) => {
     chapter.frame.forEach((frame) => {
       frame.images.forEach((image) => {
@@ -13,8 +13,10 @@ export function chooseRandomOutroImage(
       });
     });
   });
-
   const shuffledPaths = allImagePaths.sort(() => 0.5 - random(null));
-
   return shuffledPaths.slice(0, 5);
+
+  // // 1. query all images (person with cluster id)
+
+  // const {data, error} = await supabase.from('image').select(', person()')
 }

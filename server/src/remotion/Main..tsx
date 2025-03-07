@@ -1,10 +1,15 @@
 import { Series } from "remotion";
 import IntroScene from "./components/Intro";
 import OutroScene from "./components/Outro";
-import { INTRO_SCENE_LENGTH, OUTRO_SCENE_LENGTH } from "./constants/constants";
+import {
+  INTRO_SCENE_LENGTH,
+  OUTRO_SCENE_LENGTH,
+  SPECIAL_PART_LENGTH,
+} from "./constants/constants";
 import MainScene from "./components/Content";
 import { MainProps } from "./types/video.type";
 import BackgroundMedia from "./components/Main/BackgroundMedia";
+import VideoSpecialPart from "./components/Special/VideoSpecialPart";
 
 const MainVideo = ({
   contentLength,
@@ -15,6 +20,7 @@ const MainVideo = ({
   contentScene,
   titleStyle,
   outroScene,
+  specialPart,
 }: MainProps) => {
   return (
     <>
@@ -31,6 +37,9 @@ const MainVideo = ({
         </Series.Sequence>
         <Series.Sequence durationInFrames={contentLength}>
           <MainScene titleStyle={titleStyle} data={contentScene} />
+        </Series.Sequence>
+        <Series.Sequence durationInFrames={SPECIAL_PART_LENGTH}>
+          <VideoSpecialPart faces={specialPart.faces} />
         </Series.Sequence>
         <Series.Sequence durationInFrames={OUTRO_SCENE_LENGTH}>
           <OutroScene data={outroScene} />

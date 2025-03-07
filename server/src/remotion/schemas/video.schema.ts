@@ -35,12 +35,25 @@ export const introSceneSchema = z.object({
   }),
 });
 
+export const faceSchema = z.object({
+  image: z.string(),
+  name: z.string(),
+  coordinate: z.array(z.number()).length(5),
+  times: z.number(),
+});
+
+export const specialPartSchema = z.object({
+  totalFaces: z.number(),
+  faces: z.array(faceSchema),
+});
+
 export const compositionSchema = z.object({
   type: z.enum(["dev", "prod"]),
   contentLength: z.number(),
   videoDate: z.union([z.string(), z.date()]),
   introScene: introSceneSchema,
   contentScene: contentSceneSchema,
+  specialPart: specialPartSchema,
   outroScene: z.object({
     image: z.array(z.string()),
     caption: z.array(z.string()),

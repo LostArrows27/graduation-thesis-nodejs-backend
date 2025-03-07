@@ -14,6 +14,46 @@ export const generateDefaultVideoProps = (fakeDate: Date) => {
       image: [],
       caption: [],
     },
+    specialPart: {
+      totalFaces: 8,
+      faces: [
+        {
+          image:
+            "https://ddcrwzgmahgbknoviaft.supabase.co/storage/v1/object/public/gallery_image/lol.jpg",
+          name: "Thanh Dung",
+          coordinate: [317, 1271, 415, 1172],
+          times: 5,
+        },
+        {
+          image:
+            "https://ddcrwzgmahgbknoviaft.supabase.co/storage/v1/object/public/gallery_image/4032.jpg",
+          name: "Tuan Anh",
+          coordinate: [300, 1185, 418, 1067],
+          times: 4,
+        },
+        {
+          image:
+            "https://ddcrwzgmahgbknoviaft.supabase.co/storage/v1/object/public/gallery_image/403.jpg",
+          name: "Hoang Viet",
+          coordinate: [383, 129, 553, 0],
+          times: 3,
+        },
+        {
+          image:
+            "https://ddcrwzgmahgbknoviaft.supabase.co/storage/v1/object/public/gallery_image/test/received_309462195271174.jpeg",
+          name: "Duy",
+          coordinate: [868, 732, 950, 650],
+          times: 2,
+        },
+        {
+          image:
+            "https://ddcrwzgmahgbknoviaft.supabase.co/storage/v1/object/public/gallery_image/test/received_309462195271174.jpeg",
+          name: "Duy",
+          coordinate: [868, 732, 950, 650],
+          times: 2,
+        },
+      ],
+    },
     introScene: {
       firstScene: {
         title: "Our Vacation Recap",

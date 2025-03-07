@@ -41,6 +41,27 @@ export type Database = {
           },
         ]
       }
+      cluster_mapping: {
+        Row: {
+          centroid: string
+          id: number
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          centroid: string
+          id?: number
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          centroid?: string
+          id?: number
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       image: {
         Row: {
           album_id: string | null
@@ -50,6 +71,7 @@ export type Database = {
           image_bucket_id: string
           image_features: string | null
           image_name: string
+          is_face_detection: boolean
           labels: Json | null
           location: unknown | null
           updated_at: string
@@ -63,6 +85,7 @@ export type Database = {
           image_bucket_id: string
           image_features?: string | null
           image_name: string
+          is_face_detection?: boolean
           labels?: Json | null
           location?: unknown | null
           updated_at?: string
@@ -76,6 +99,7 @@ export type Database = {
           image_bucket_id?: string
           image_features?: string | null
           image_name?: string
+          is_face_detection?: boolean
           labels?: Json | null
           location?: unknown | null
           updated_at?: string
@@ -92,6 +116,58 @@ export type Database = {
           {
             foreignKeyName: "image_uploader_id_fkey"
             columns: ["uploader_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      person: {
+        Row: {
+          cluster_id: number | null
+          coordinate: Json
+          created_at: string
+          embedding: string
+          id: number
+          image_id: string
+          user_id: string
+        }
+        Insert: {
+          cluster_id?: number | null
+          coordinate: Json
+          created_at?: string
+          embedding: string
+          id?: number
+          image_id: string
+          user_id: string
+        }
+        Update: {
+          cluster_id?: number | null
+          coordinate?: Json
+          created_at?: string
+          embedding?: string
+          id?: number
+          image_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "person_cluster_id_fkey"
+            columns: ["cluster_id"]
+            isOneToOne: false
+            referencedRelation: "cluster_mapping"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "person_image_id_fkey"
+            columns: ["image_id"]
+            isOneToOne: false
+            referencedRelation: "image"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "person_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]

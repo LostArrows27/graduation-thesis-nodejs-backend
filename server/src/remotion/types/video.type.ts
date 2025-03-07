@@ -1,11 +1,20 @@
 import { z } from "zod";
-import { compositionSchema, introSceneSchema } from "../schemas/video.schema";
+import {
+  compositionSchema,
+  faceSchema,
+  introSceneSchema,
+  specialPartSchema,
+} from "../schemas/video.schema";
 import { ChapterWithDuration } from "./frame.type";
 import { contentSceneSchema } from "../schemas/content.schema";
 
 export type MainProps = z.infer<typeof compositionSchema>;
 
 export type IntroProps = z.infer<typeof introSceneSchema>;
+
+export type SpecialPartProps = z.infer<typeof specialPartSchema>;
+
+export type FaceProps = z.infer<typeof faceSchema>;
 
 export type ContentProps = {
   data: ChapterWithDuration[];
