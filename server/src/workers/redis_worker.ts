@@ -77,7 +77,10 @@ export const redisWorker = async () => {
           redisClient.del(`render:user-${userId}`),
           redisClient.set(
             `video:user-${userId}:render-${renderQueueId}`,
-            chunkURLs.join(", ")
+            chunkURLs.join(", "),
+            {
+              EX: 60 * 60 * 24, // 1 day
+            }
           ),
         ]);
 

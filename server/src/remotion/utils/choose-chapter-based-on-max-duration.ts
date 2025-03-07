@@ -2,6 +2,7 @@ import {
   CHAPTER_TRANSITION_TIME,
   INTRO_SCENE_LENGTH,
   OUTRO_SCENE_LENGTH,
+  SPECIAL_PART_LENGTH,
   VIDEO_FPS,
 } from "../constants/constants";
 import { ChapterWithDuration } from "../types/frame.type";
@@ -29,7 +30,7 @@ export const chooseChapterBasedOnMaxDuration = (
       contentTotalDuration: calculateVideoDuration(chapters),
     };
 
-  let totalDuration = INTRO_SCENE_LENGTH + OUTRO_SCENE_LENGTH;
+  let totalDuration = INTRO_SCENE_LENGTH + OUTRO_SCENE_LENGTH + SPECIAL_PART_LENGTH;
 
   const choosenChapter: ChapterWithDuration[] = [];
 
@@ -54,6 +55,7 @@ export const chooseChapterBasedOnMaxDuration = (
     totalDuration =
       INTRO_SCENE_LENGTH +
       OUTRO_SCENE_LENGTH +
+      SPECIAL_PART_LENGTH +
       choosenChapter[0].durationInFrames;
   }
 

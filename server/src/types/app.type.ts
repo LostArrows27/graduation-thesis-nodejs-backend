@@ -7,6 +7,7 @@ import {
 } from "../schema/video_option.schema";
 import { z } from "zod";
 import { InputPropsType } from "./render.type";
+import { Json } from "./supabase/database.types";
 
 export interface AuthUserRequest extends Request {
   body: {
@@ -35,3 +36,16 @@ export type SchemaEditOption = z.infer<typeof videoEditSchema>;
 export type VideoTheme = z.infer<typeof videoTheme>;
 
 export type VideoOptionSchema = z.infer<typeof videoOptionSchema>;
+
+export type PersonImage = {
+  image_id: string;
+  cluster_id: number | null;
+  coordinate: Json;
+  image: {
+    image_name: string;
+    image_bucket_id: string;
+  };
+  cluster_mapping: {
+    name: string;
+  } | null;
+}[];

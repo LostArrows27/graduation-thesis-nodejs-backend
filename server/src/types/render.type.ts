@@ -4,6 +4,7 @@ import {
   ContentSceneProps,
   IntroProps,
   RenderType,
+  SpecialPartProps,
 } from "../remotion/types/video.type";
 
 export type RenderVideoOptions = Omit<
@@ -25,6 +26,7 @@ export type InputPropsType = {
       images: string[];
     };
   };
+  specialPart?: SpecialPartProps;
   contentScene: ChapterWithDuration[];
   // editable props -> refers to video.schema.ts
   bgMusic: string;

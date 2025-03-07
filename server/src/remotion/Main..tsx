@@ -39,7 +39,10 @@ const MainVideo = ({
           <MainScene titleStyle={titleStyle} data={contentScene} />
         </Series.Sequence>
         <Series.Sequence durationInFrames={SPECIAL_PART_LENGTH}>
-          <VideoSpecialPart faces={specialPart.faces} />
+          <VideoSpecialPart
+            totalFaces={specialPart.totalFaces}
+            faces={specialPart.faces}
+          />
         </Series.Sequence>
         <Series.Sequence durationInFrames={OUTRO_SCENE_LENGTH}>
           <OutroScene data={outroScene} />

@@ -1,7 +1,12 @@
+/* eslint-disable @remotion/deterministic-randomness */
 import { Response } from "express";
 import express from "express";
 import { checkAccessToken } from "../middlewares/auth_middleware";
-import { CreateSchemaRequest, EditSchemaRequest } from "../types/app.type";
+import {
+  CreateSchemaRequest,
+  EditSchemaRequest,
+  PersonImage,
+} from "../types/app.type";
 import { logger } from "../helpers/logging/logger";
 import { checkCreateSchemaParamsMiddleware } from "../middlewares/check_create_schema_params_middleware";
 import supabase from "../configs/supabase";
@@ -67,11 +72,72 @@ schemaRouter.post(
 
       const videoSchema = generateVideoInputSchema(imageJSON);
 
-      const [contentWithAICaption, thumbnailUrl] = await Promise.all([
-        GeminiService.generateCaptionForVideo(videoSchema.contentScene),
-        renderVideoThumbnail(videoSchema, renderQueueId!, user.id),
-      ]);
+      // get AI caption
+      const getAICaption = async () => {
+        const [contentWithAICaption, thumbnailUrl] = await Promise.all([
+          GeminiService.generateCaptionForVideo(videoSchema.contentScene),
+          renderVideoThumbnail(videoSchema, renderQueueId!, user.id),
+        ]);
 
+        return { contentWithAICaption, thumbnailUrl };
+      };
+
+      // get top 4 face
+      const getFaceImage = async () => {
+        const { data: faceData } = await supabase
+          .from("person")
+          .select(
+            "image_id, cluster_id, coordinate, image(image_name, image_bucket_id), cluster_mapping(name)"
+          )
+          .in("image_id", imageIdList!)
+          .returns<PersonImage>()
+          .throwOnError();
+
+        const clusterGroups: Record<string, PersonImage> = {};
+
+        faceData?.forEach((person) => {
+          if (!person.cluster_id) return;
+
+          if (!clusterGroups[person.cluster_id]) {
+            clusterGroups[person.cluster_id] = [];
+          }
+          clusterGroups[person.cluster_id].push(person);
+        });
+
+        const sortedClusters = Object.entries(clusterGroups)
+          .map(([clusterId, persons]) => ({
+            clusterId,
+            persons,
+            count: persons.length,
+          }))
+          .sort((a, b) => b.count - a.count);
+
+        const topClusters = sortedClusters.slice(0, 4);
+
+        const faces = topClusters.map((cluster) => {
+          const randomPerson =
+            cluster.persons[Math.floor(Math.random() * cluster.persons.length)];
+
+          return {
+            image: supabase.storage
+              .from(randomPerson.image.image_bucket_id)
+              .getPublicUrl(randomPerson.image.image_name).data.publicUrl,
+            name: randomPerson.cluster_mapping?.name || "Unknown",
+            coordinate: (randomPerson.coordinate as number[]) || [0, 0, 0, 0],
+            times: cluster.count,
+          };
+        });
+
+        return {
+          totalFaces: sortedClusters.length,
+          faces,
+        };
+      };
+
+      const [specialPartData, { contentWithAICaption, thumbnailUrl }] =
+        await Promise.all([getFaceImage(), getAICaption()]);
+
+      videoSchema.specialPart = specialPartData;
       videoSchema.contentScene = contentWithAICaption;
 
       await supabase
@@ -98,6 +164,7 @@ schemaRouter.post(
         bgVideoTheme: getSeasonFromDate(new Date(Date.now())),
         maxDuration: videoSchema.maxDuration,
         thumbnailUrl,
+        specialPart: specialPartData,
       };
 
       res
