@@ -74,8 +74,12 @@ const calculateMetadata: CalculateMetadataFunction<MainProps> = async ({
   const totalDurationInFrames =
     INTRO_SCENE_LENGTH +
     contentTotalDuration +
-    SPECIAL_PART_LENGTH +
-    OUTRO_SCENE_LENGTH;
+    OUTRO_SCENE_LENGTH +
+    (props?.specialPart &&
+    props?.specialPart.totalFaces > 0 &&
+    props.specialPart.faces.length > 0
+      ? SPECIAL_PART_LENGTH
+      : 0);
 
   return {
     durationInFrames: totalDurationInFrames,

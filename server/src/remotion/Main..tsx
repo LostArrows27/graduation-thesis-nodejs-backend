@@ -38,12 +38,14 @@ const MainVideo = ({
         <Series.Sequence durationInFrames={contentLength}>
           <MainScene titleStyle={titleStyle} data={contentScene} />
         </Series.Sequence>
-        <Series.Sequence durationInFrames={SPECIAL_PART_LENGTH}>
-          <VideoSpecialPart
-            totalFaces={specialPart.totalFaces}
-            faces={specialPart.faces}
-          />
-        </Series.Sequence>
+        {specialPart.faces.length > 0 && specialPart.totalFaces > 0 && (
+          <Series.Sequence durationInFrames={SPECIAL_PART_LENGTH}>
+            <VideoSpecialPart
+              totalFaces={specialPart.totalFaces}
+              faces={specialPart.faces}
+            />
+          </Series.Sequence>
+        )}
         <Series.Sequence durationInFrames={OUTRO_SCENE_LENGTH}>
           <OutroScene data={outroScene} />
         </Series.Sequence>
