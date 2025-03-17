@@ -106,6 +106,7 @@ export async function waitForImageLabelingJobDone(
 
         labeledImages[imageId] = {
           id: imageId,
+          is_face_detection: false,
           image_bucket_id: imageData.image_bucket_id,
           image_name: imageData.image_name,
           labels: JSON.parse(imageData.labels),

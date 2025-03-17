@@ -4,6 +4,9 @@
     "no-warning-comments": "off",
     "react/prefer-read-only-props": "off",
     "react/boolean-prop-naming": "off",
-    "camelcase": "off",
+    "camelcase": "off"
+  },
+  "env": {
+    "jest": true
   }
 }

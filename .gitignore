@@ -9,4 +9,6 @@ server/out
 
 server/src/gemini.ts
 
+server/coverage
+
 TODO.md
