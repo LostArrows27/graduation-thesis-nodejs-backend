@@ -11,6 +11,7 @@ export default {
     // unit testing
     "src/configs/setting.ts",
     "src/helpers/images/image_grouping.ts",
+    "src/helpers/remotion/process_video_input_props.ts",
     // "src/service/*.ts",
     // // remotion unit testing
     // "src/remotion/utils/*.ts",
@@ -31,4 +32,7 @@ export default {
       },
     ],
   },
+  transformIgnorePatterns: [
+    "node_modules/(?!(chalk|#ansi-styles|color-convert|color-name)/)",
+  ],
 };

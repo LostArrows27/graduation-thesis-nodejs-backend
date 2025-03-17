@@ -12,7 +12,6 @@ import { checkCreateSchemaParamsMiddleware } from "../middlewares/check_create_s
 import supabase from "../configs/supabase";
 import { ImageMetaData } from "../types/database.type";
 import { groupImageByLabel } from "../helpers/images/image_grouping";
-import { generateVideoInputSchema } from "../helpers/remotion/process_video_input_props";
 import { categorizedImage } from "../helpers/redis/update_unlabel_image";
 import GeminiService from "../service/gemini_service";
 import { checkEditSchemaParamsMiddleware } from "../middlewares/check_edit_schema_params_middleware";
@@ -22,6 +21,7 @@ import {
 } from "../remotion/utils/seasonal-helper";
 import { fromSeasonToDate } from "../helpers/timer/from_season_to_date";
 import { renderVideoThumbnail } from "../helpers/remotion/remotion_render";
+import { generateVideoInputSchema } from "../helpers/remotion/generate_video_schema";
 
 const schemaRouter = express.Router();
 

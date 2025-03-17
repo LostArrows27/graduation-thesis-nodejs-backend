@@ -1,54 +1,7 @@
-import { random } from "remotion";
 import { ImageJSON } from "../../remotion/types/frame.type";
-import { calculateVideoTimeline } from "../../remotion/utils/calculate-video-timeline";
-import { chooseIntroTitle } from "../../remotion/utils/choose-intro-title";
-import { chooseIntroMusic } from "../../remotion/utils/choose-music";
-import { getRandomAssetByDate } from "../../remotion/utils/seasonal-helper";
-import { uploadAndResizeImages } from "../../remotion/utils/transform-image-size";
-import { InputPropsType } from "../../types/render.type";
 // import { EXCLUDE_LABELS } from "../constants/constants";
 
 // NOTE: old
-
-export const generateVideoInputSchema = (
-  imageJSON: ImageJSON
-): InputPropsType => {
-  const videoDate = new Date(Date.now());
-
-  return {
-    type: "prod",
-    videoDate: videoDate.toISOString(),
-    introScene: {
-      firstScene: {
-        images: selectIntroFirstSceneImages(imageJSON),
-        title: chooseIntroTitle(videoDate),
-      },
-      secondScene: {
-        images: selectIntroSecondSceneImages(imageJSON),
-      },
-    },
-    contentScene: calculateVideoTimeline(imageJSON),
-    // editable props
-    bgMusic: chooseIntroMusic(),
-    bgVideo: {
-      src: getRandomAssetByDate(videoDate, "videos"),
-      frameLength: 0, // NOTE: will be calculated later
-    },
-    titleStyle: Math.floor(random(null) * 2),
-  };
-};
-
-export const processVideoInputProps = async (
-  videoSchema: InputPropsType
-): Promise<InputPropsType> => {
-  const secondSceneImageResized = await uploadAndResizeImages(
-    videoSchema.introScene.secondScene.images
-  );
-
-  videoSchema.introScene.secondScene.images = secondSceneImageResized;
-
-  return videoSchema;
-};
 
 export const selectIntroFirstSceneImages = (
   groups: ImageJSON,
@@ -80,6 +33,23 @@ export const selectIntroFirstSceneImages = (
       .map((img) => img.path);
 
     bestImages.push(...remainingImages);
+  }
+
+  // If there are more than 4 images, remove the least relevant ones
+  if (bestImages.length === 3) {
+    bestImages.push(bestImages[0]);
+  }
+
+  if (bestImages.length === 2) {
+    bestImages.push(bestImages[0], bestImages[1]);
+  }
+
+  if (bestImages.length === 1) {
+    bestImages.push(...bestImages, ...bestImages, ...bestImages);
+  }
+
+  if (bestImages.length === 0) {
+    throw new Error("No images found");
   }
 
   return bestImages;

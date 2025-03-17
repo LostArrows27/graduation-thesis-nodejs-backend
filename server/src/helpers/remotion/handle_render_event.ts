@@ -1,9 +1,9 @@
 import { logger } from "../logging/logger";
 import { InputPropsType, RenderVideoOptions } from "../../types/render.type";
-import { processVideoInputProps } from "./process_video_input_props";
 import supabase from "../../configs/supabase";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
+import { processVideoInputProps } from "./generate_video_schema";
 
 export const onBundleProgress = (progress: number) => {
   if (Number.isInteger(progress * 100) && (progress * 100) % 10 === 0) {
