@@ -8,7 +8,13 @@ export default {
   },
   coverageDirectory: "coverage",
   collectCoverageFrom: [
-    "src/configs/*.ts",
+    // unit testing
+    "src/configs/setting.ts",
+    "src/helpers/images/image_grouping.ts",
+    // "src/service/*.ts",
+    // // remotion unit testing
+    // "src/remotion/utils/*.ts",
+    // exclude
     "!src/**/*.type.ts",
     "!src/types/**/*.ts",
     "!**/node_modules/**",

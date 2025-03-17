@@ -1,5 +1,5 @@
 export const BROAD_LABEL_GROUP_FILE_PATH =
-  "./src/assets/labels/location_label_with_group.txt";
+  "D:\\Code Space\\backend\\nodejs-server\\server\\src\\assets\\labels\\location_label_with_group.txt";
 
 export const CLUSTER_MIN_LENGTH = 3;
 
