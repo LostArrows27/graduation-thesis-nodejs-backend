@@ -53,6 +53,7 @@ const calculateMetadata: CalculateMetadataFunction<MainProps> = async ({
 
   const { chapters, contentTotalDuration } = chooseChapterBasedOnMaxDuration(
     props.contentScene,
+    props?.specialPart.totalFaces > 0 && props.specialPart.faces.length > 0,
     props?.maxDuration
   );
 

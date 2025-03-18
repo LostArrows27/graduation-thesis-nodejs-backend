@@ -7,9 +7,8 @@ import {
 } from "../constants/constants";
 import { ChapterWithDuration } from "../types/frame.type";
 import {
-  calculateChapterDuration,
-  calculateTotalFrameDuration,
   calculateVideoDuration,
+  calculateVideoTimelineFromChapterList,
 } from "./calculate-video-timeline";
 
 type ChoosenChapterContent = {
@@ -22,6 +21,7 @@ type ChoosenChapterContent = {
 // 2. recalculate the duration of each chapter (include: transition at end / begin / between chapters)
 export const chooseChapterBasedOnMaxDuration = (
   chapters: ChapterWithDuration[],
+  isHaveFaces: boolean,
   maxDuration?: number
 ): ChoosenChapterContent => {
   if (!maxDuration || maxDuration <= 0)
@@ -30,7 +30,10 @@ export const chooseChapterBasedOnMaxDuration = (
       contentTotalDuration: calculateVideoDuration(chapters),
     };
 
-  let totalDuration = INTRO_SCENE_LENGTH + OUTRO_SCENE_LENGTH + SPECIAL_PART_LENGTH;
+  let totalDuration =
+    INTRO_SCENE_LENGTH +
+    OUTRO_SCENE_LENGTH +
+    (isHaveFaces ? SPECIAL_PART_LENGTH : 0);
 
   const choosenChapter: ChapterWithDuration[] = [];
 
@@ -55,36 +58,12 @@ export const chooseChapterBasedOnMaxDuration = (
     totalDuration =
       INTRO_SCENE_LENGTH +
       OUTRO_SCENE_LENGTH +
-      SPECIAL_PART_LENGTH +
-      choosenChapter[0].durationInFrames;
+      choosenChapter[0].durationInFrames +
+      (isHaveFaces ? SPECIAL_PART_LENGTH : 0);
   }
 
   return {
     chapters: calculateVideoTimelineFromChapterList(choosenChapter),
     contentTotalDuration: calculateVideoDuration(choosenChapter),
   };
-};
-
-const calculateVideoTimelineFromChapterList = (
-  chapters: ChapterWithDuration[]
-): ChapterWithDuration[] => {
-  const newChapters = chapters.map((chapter, index) => {
-    const framesTotalDuration = calculateTotalFrameDuration(
-      chapter.frame,
-      chapter.transition
-    );
-
-    const chapterTotalDuration = calculateChapterDuration(
-      framesTotalDuration,
-      index,
-      chapters.length
-    );
-
-    return {
-      ...chapter,
-      durationInFrames: chapterTotalDuration,
-    };
-  });
-
-  return newChapters;
 };

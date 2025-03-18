@@ -17,6 +17,7 @@ export default {
     "src/remotion/utils/generate-video-content.ts",
     "src/remotion/utils/choose-random-outro-image.ts",
     "src/remotion/utils/choose-chapter-title-image.ts",
+    "src/remotion/utils/choose-chapter-based-on-max-duration.ts",
     // "src/remotion/utils/calculate-video-timeline.ts",
     // "src/service/*.ts",
     // // remotion unit testing

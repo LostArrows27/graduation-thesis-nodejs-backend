@@ -17,6 +17,13 @@ import {
 } from "../types/frame.type";
 import { generateVideoContent } from "./generate-video-content";
 
+/* NOTE:
+- video = intro + outro + chapters
+- chapters = title + content
+- content =  frame + transition
+- transition = self-built / built-in
+*/
+
 // called transition time = b
 /* 1. Video -> have transition after every chapter (end transition)
     - 1st chapter -> b (1b of next)
@@ -36,7 +43,7 @@ export const calculateVideoTimeline = (
 ): ChapterWithDuration[] => {
   const chapters = generateVideoContent(imageData);
 
-  // NOTE: slide "chapters" if wanna test with fewer chaps
+  // slide "chapters" if wanna test with fewer chaps
   const newChapters = chapters.map((chapter, index) => {
     const framesTotalDuration = calculateTotalFrameDuration(
       chapter.frame,
@@ -77,8 +84,8 @@ export const calculateChapterDuration = (
 ) => {
   // NOTE: every chap have in + out transition
   //       -> add chap trans time at begin + end of chap
-  // except first chapter -> no in transitionc
-  const chapterDuration =
+  // except first chapter -> no in transition
+  const chapterTitleDuration =
     (index === 0 ? 0 : CHAPTER_TRANSITION_TIME) +
     TITLE_FRAME_DURATION +
     TITLE_TRANSITION_TIME;
@@ -89,7 +96,7 @@ export const calculateChapterDuration = (
     (index === total - 1 ? OUTRO_FADE_TIME : CHAPTER_TRANSITION_TIME); // NOTE :last chapter faster fade out for outro appear
 
   const totalDuration =
-    chapterDuration + contentDuration - TITLE_TRANSITION_TIME;
+    chapterTitleDuration + contentDuration - TITLE_TRANSITION_TIME;
 
   return totalDuration;
 };
@@ -121,6 +128,7 @@ export const calculateFrameDuration = (
   total: number,
   chapterTransitionType: Transition
 ) => {
+  // 1 frame don't need frame transition
   if (total === 1 && frame.type === "single") {
     if (chapterTransitionType.type === "self-built") {
       return SINGLE_IMAGE_FRAME_DURATION;
@@ -137,6 +145,7 @@ export const calculateFrameDuration = (
     return BUILT_IN_MULTI_FRAME_DURATION;
   }
 
+  // many frame need transition time -> additionalTime
   const frameDuration =
     chapterTransitionType.type === "self-built"
       ? frame.type === "single"
@@ -148,8 +157,32 @@ export const calculateFrameDuration = (
 
   const additionalTime =
     index === 0 || index === total - 1
-      ? FRAME_TRANSITION_TIME
-      : FRAME_TRANSITION_TIME * 2;
+      ? FRAME_TRANSITION_TIME // 1st frame / last frame
+      : FRAME_TRANSITION_TIME * 2; // other frame will need transition in + out
 
   return frameDuration + additionalTime;
+};
+
+export const calculateVideoTimelineFromChapterList = (
+  chapters: ChapterWithDuration[]
+): ChapterWithDuration[] => {
+  const newChapters = chapters.map((chapter, index) => {
+    const framesTotalDuration = calculateTotalFrameDuration(
+      chapter.frame,
+      chapter.transition
+    );
+
+    const chapterTotalDuration = calculateChapterDuration(
+      framesTotalDuration,
+      index,
+      chapters.length
+    );
+
+    return {
+      ...chapter,
+      durationInFrames: chapterTotalDuration,
+    };
+  });
+
+  return newChapters;
 };
