@@ -10,7 +10,7 @@ export const duplicateImageInView = (
   images: string[],
   firstCaption: string,
   secondCaption: string,
-  totalLength: number,
+  totalLength = 42,
 ): string[][] => {
   const numColumns = 7;
   const numRows = 6;

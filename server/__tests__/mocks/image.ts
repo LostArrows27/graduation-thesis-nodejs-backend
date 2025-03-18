@@ -11,8 +11,18 @@ export const mockImageMetaData: ImageMetaData[] = [
     image_features: null,
     is_face_detection: false,
     labels: {
-      event_labels: [],
-      action_labels: [],
+      event_labels: [
+        {
+          Thanksgiving: 0.5,
+          "New Year Celebrations": 0.2,
+        },
+      ],
+      action_labels: [
+        {
+          running: 0.5,
+          walking: 0.2,
+        },
+      ],
       location_labels: [{ beach: 0.8, coast: 0.1 }],
     },
     location: "",
@@ -29,8 +39,18 @@ export const mockImageMetaData: ImageMetaData[] = [
     image_features: null,
     is_face_detection: false,
     labels: {
-      event_labels: [],
-      action_labels: [],
+      event_labels: [
+        {
+          Thanksgiving: 0.5,
+          "New Year Celebrations": 0.2,
+        },
+      ],
+      action_labels: [
+        {
+          running: 0.5,
+          walking: 0.2,
+        },
+      ],
       location_labels: [{ beach: 0.9, forest: 0.1 }],
     },
     location: "",
@@ -47,8 +67,18 @@ export const mockImageMetaData: ImageMetaData[] = [
     image_features: null,
     is_face_detection: false,
     labels: {
-      event_labels: [],
-      action_labels: [],
+      event_labels: [
+        {
+          Thanksgiving: 0.5,
+          "New Year Celebrations": 0.2,
+        },
+      ],
+      action_labels: [
+        {
+          running: 0.5,
+          walking: 0.2,
+        },
+      ],
       location_labels: [{ beach: 0.9, ocean: 0.1 }],
     },
     location: "",
@@ -65,8 +95,18 @@ export const mockImageMetaData: ImageMetaData[] = [
     image_features: null,
     is_face_detection: false,
     labels: {
-      event_labels: [],
-      action_labels: [],
+      event_labels: [
+        {
+          Marathon: 0.5,
+          "New Year Celebrations": 0.2,
+        },
+      ],
+      action_labels: [
+        {
+          smiling: 0.5,
+          talking: 0.2,
+        },
+      ],
       location_labels: [{ beach: 0.5, pond: 0.1 }],
     },
     location: "",
@@ -83,7 +123,12 @@ export const mockImageMetaData: ImageMetaData[] = [
     image_features: null,
     is_face_detection: false,
     labels: {
-      event_labels: [],
+      event_labels: [
+        {
+          Concert: 0.5,
+          "New Year Celebrations": 0.2,
+        },
+      ],
       action_labels: [],
       location_labels: [{ zoo: 0.5, park: 0.1 }],
     },
@@ -101,7 +146,12 @@ export const mockImageMetaData: ImageMetaData[] = [
     image_features: null,
     is_face_detection: false,
     labels: {
-      event_labels: [],
+      event_labels: [
+        {
+          "Pool Party": 0.5,
+          "New Year Celebrations": 0.2,
+        },
+      ],
       action_labels: [],
       location_labels: [{ zoo: 0.6, museum: 0.1 }],
     },
@@ -176,6 +226,179 @@ export const mockImageMetaData: ImageMetaData[] = [
       event_labels: [],
       action_labels: [],
       location_labels: [{ kindergarten: 0.6, tree: 0.2 }],
+    },
+    location: "",
+    updated_at: Date.now().toString(),
+    uploader_id: null,
+  },
+];
+
+// create a complete mock image from the image metadata
+export const mockImageForVideoContent = [
+  ...mockImageMetaData,
+  {
+    album_id: null,
+    created_at: Date.now().toString(),
+    description: null,
+    id: "1",
+    image_bucket_id: "image_bucket_1",
+    image_name: "image_name_1",
+    image_features: null,
+    is_face_detection: false,
+    labels: {
+      event_labels: [
+        {
+          Thanksgiving: 0.5,
+          "New Year Celebrations": 0.2,
+        },
+      ],
+      action_labels: [
+        {
+          running: 0.5,
+          walking: 0.2,
+        },
+      ],
+      location_labels: [{ beach: 0.8, coast: 0.1 }],
+    },
+    location: "",
+    updated_at: Date.now().toString(),
+    uploader_id: null,
+  },
+  {
+    album_id: null,
+    created_at: Date.now().toString(),
+    description: null,
+    id: "1",
+    image_bucket_id: "image_bucket_1",
+    image_name: "image_name_1",
+    image_features: null,
+    is_face_detection: false,
+    labels: {
+      event_labels: [
+        {
+          Thanksgiving: 0.5,
+          "New Year Celebrations": 0.2,
+        },
+      ],
+      action_labels: [
+        {
+          running: 0.5,
+          walking: 0.2,
+        },
+      ],
+      location_labels: [{ beach: 0.8, coast: 0.1 }],
+    },
+    location: "",
+    updated_at: Date.now().toString(),
+    uploader_id: null,
+  },
+  {
+    album_id: null,
+    created_at: Date.now().toString(),
+    description: null,
+    id: "1",
+    image_bucket_id: "image_bucket_1",
+    image_name: "image_name_1",
+    image_features: null,
+    is_face_detection: false,
+    labels: {
+      event_labels: [
+        {
+          Thanksgiving: 0.5,
+          "New Year Celebrations": 0.2,
+        },
+      ],
+      action_labels: [
+        {
+          running: 0.5,
+          walking: 0.2,
+        },
+      ],
+      location_labels: [{ beach: 0.8, coast: 0.1 }],
+    },
+    location: "",
+    updated_at: Date.now().toString(),
+    uploader_id: null,
+  },
+  {
+    album_id: null,
+    created_at: Date.now().toString(),
+    description: null,
+    id: "1",
+    image_bucket_id: "image_bucket_1",
+    image_name: "image_name_1",
+    image_features: null,
+    is_face_detection: false,
+    labels: {
+      event_labels: [
+        {
+          Thanksgiving: 0.5,
+          "New Year Celebrations": 0.2,
+        },
+      ],
+      action_labels: [
+        {
+          running: 0.5,
+          walking: 0.2,
+        },
+      ],
+      location_labels: [{ beach: 0.8, coast: 0.1 }],
+    },
+    location: "",
+    updated_at: Date.now().toString(),
+    uploader_id: null,
+  },
+  {
+    album_id: null,
+    created_at: Date.now().toString(),
+    description: null,
+    id: "1",
+    image_bucket_id: "image_bucket_1",
+    image_name: "image_name_1",
+    image_features: null,
+    is_face_detection: false,
+    labels: {
+      event_labels: [
+        {
+          Thanksgiving: 0.5,
+          "New Year Celebrations": 0.2,
+        },
+      ],
+      action_labels: [
+        {
+          running: 0.5,
+          walking: 0.2,
+        },
+      ],
+      location_labels: [{ beach: 0.8, coast: 0.1 }],
+    },
+    location: "",
+    updated_at: Date.now().toString(),
+    uploader_id: null,
+  },
+  {
+    album_id: null,
+    created_at: Date.now().toString(),
+    description: null,
+    id: "1",
+    image_bucket_id: "image_bucket_1",
+    image_name: "image_name_1",
+    image_features: null,
+    is_face_detection: false,
+    labels: {
+      event_labels: [
+        {
+          Thanksgiving: 0.5,
+          "New Year Celebrations": 0.2,
+        },
+      ],
+      action_labels: [
+        {
+          running: 0.5,
+          walking: 0.2,
+        },
+      ],
+      location_labels: [{ beach: 0.8, coast: 0.1 }],
     },
     location: "",
     updated_at: Date.now().toString(),

@@ -68,7 +68,7 @@ const calculateMetadata: CalculateMetadataFunction<MainProps> = async ({
   props.contentLength = contentTotalDuration;
   props.contentScene = chapters;
   props.titleStyle = props?.titleStyle || Math.floor(random(null) * 2);
-  props.outroScene.image = await chooseRandomOutroImage(props.contentScene);
+  props.outroScene.image = chooseRandomOutroImage(props.contentScene);
   props.outroScene.caption = chooseRandomOutroCaption();
 
   const totalDurationInFrames =

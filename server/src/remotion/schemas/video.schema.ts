@@ -38,7 +38,7 @@ export const introSceneSchema = z.object({
 export const faceSchema = z.object({
   image: z.string(),
   name: z.string(),
-  coordinate: z.array(z.number()).length(5),
+  coordinate: z.array(z.number()).length(4),
   times: z.number(),
 });
 

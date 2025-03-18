@@ -2,9 +2,9 @@ import { random } from "remotion";
 import { ChapterWithDuration } from "../types/frame.type";
 
 // TODO: choose group image with max members instead
-export async function chooseRandomOutroImage(
+export function chooseRandomOutroImage(
   chaptersWithDuration: ChapterWithDuration[]
-): Promise<string[]> {
+): string[] {
   const allImagePaths: string[] = [];
   chaptersWithDuration.forEach((chapter) => {
     chapter.frame.forEach((frame) => {
@@ -13,10 +13,31 @@ export async function chooseRandomOutroImage(
       });
     });
   });
+
   const shuffledPaths = allImagePaths.sort(() => 0.5 - random(null));
-  return shuffledPaths.slice(0, 5);
 
-  // // 1. query all images (person with cluster id)
+  if (shuffledPaths.length < 4) {
+    if (shuffledPaths.length === 0) {
+      throw Error("No chapter available");
+    }
 
-  // const {data, error} = await supabase.from('image').select(', person()')
+    if (shuffledPaths.length === 1) {
+      return [
+        shuffledPaths[0],
+        shuffledPaths[0],
+        shuffledPaths[0],
+        shuffledPaths[0],
+      ];
+    }
+
+    if (shuffledPaths.length === 2) {
+      shuffledPaths.push(shuffledPaths[0], shuffledPaths[1]);
+    }
+
+    if (shuffledPaths.length === 3) {
+      shuffledPaths.push(shuffledPaths[0]);
+    }
+  }
+
+  return shuffledPaths.slice(0, 4);
 }

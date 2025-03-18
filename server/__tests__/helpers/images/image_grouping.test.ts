@@ -80,8 +80,8 @@ describe("groupImagesByLocationLabel", () => {
             .getPublicUrl(mockImageMetaData[0].image_name).data.publicUrl,
           labels: {
             location: { beach: 0.8, coast: 0.1 },
-            activity: {},
-            event: {},
+            activity: labelMapping(mockImageMetaData[0].labels!.action_labels),
+            event: labelMapping(mockImageMetaData[0].labels!.event_labels),
           },
         },
         {
@@ -90,8 +90,8 @@ describe("groupImagesByLocationLabel", () => {
             .getPublicUrl(mockImageMetaData[1].image_name).data.publicUrl,
           labels: {
             location: { beach: 0.9, forest: 0.1 },
-            activity: {},
-            event: {},
+            activity: labelMapping(mockImageMetaData[1].labels!.action_labels),
+            event: labelMapping(mockImageMetaData[1].labels!.event_labels),
           },
         },
       ],

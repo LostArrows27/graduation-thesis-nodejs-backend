@@ -17,6 +17,7 @@ const getRandomImage = (
   return images[randomIndex].path;
 };
 
+// return 1 image with highest confident + 1 random image
 export const chooseChapterTitleImage = (
   frames: Frame[],
   title: string,
@@ -39,6 +40,10 @@ export const chooseChapterTitleImage = (
   });
 
   imagesWithConfidence.sort((a, b) => b.confidence - a.confidence);
+
+  if (imagesWithConfidence.length === 0) {
+    throw new Error("No images found for title image");
+  }
 
   const highestConfidenceImage = imagesWithConfidence[0];
 

@@ -1,12 +1,12 @@
 import { random } from "remotion";
 import { Chapter, Frame, ImageJSON, ImageMetadata } from "../types/frame.type";
-import {
-  MAX_EVENT_FRAME,
-  MAX_IMAGE_PER_FRAME,
-  MIN_CONFIDENCE,
-  transitionEffects,
-} from "../constants/frame";
+import { MAX_EVENT_FRAME, MAX_IMAGE_PER_FRAME } from "../constants/frame";
 import { getGroupByLabel } from "./label-helpers";
+import {
+  chooseRandomTransition,
+  removeLowActivityConfidence,
+  removeLowEventConfidence,
+} from "./generate-video-content-helper";
 // import { imageJSON } from "../assets/images";
 
 /* Video -> Chapter -> Frame -> Image
@@ -27,39 +27,6 @@ import { getGroupByLabel } from "./label-helpers";
         3. each group -> 1 frame 
         4. push all frame to chapter (or location chapter)
 */
-
-// NOTE: slice to auto have self-built type -> remove remotion-type
-export const chooseRandomTransition = () => {
-  const transitionEffectsNew = transitionEffects;
-  // .slice(2);
-  // .slice(0, 2);
-
-  return transitionEffectsNew[
-    Math.floor(random(null) * transitionEffectsNew.length)
-  ];
-};
-
-export const removeLowActivityConfidence = (images: ImageJSON) => {
-  const filterImages: ImageJSON = {};
-  // eslint-disable-next-line guard-for-in
-  for (const key in images) {
-    filterImages[key] = images[key].filter(
-      (image) => Object.values(image.labels.activity)[0] > MIN_CONFIDENCE
-    );
-  }
-  return filterImages;
-};
-
-export const removeLowEventConfidence = (images: ImageJSON) => {
-  const filterImages: ImageJSON = {};
-  // eslint-disable-next-line guard-for-in
-  for (const key in images) {
-    filterImages[key] = images[key].filter(
-      (image) => Object.values(image.labels.event)[0] > MIN_CONFIDENCE
-    );
-  }
-  return filterImages;
-};
 
 export const generateVideoContent = (images: ImageJSON): Chapter[] => {
   const chapters: Chapter[] = [];
