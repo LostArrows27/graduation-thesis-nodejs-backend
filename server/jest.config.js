@@ -6,6 +6,9 @@ export default {
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1", // Handle ESM imports
   },
+  transformIgnorePatterns: [
+    "node_modules/(?!(.pnpm/)?(chalk|strip-ansi|ansi-regex|ansi-styles|color-convert|color-name)/)",
+  ],
   coverageDirectory: "coverage",
   collectCoverageFrom: [
     // unit testing
@@ -31,12 +34,13 @@ export default {
   testMatch: ["**/__tests__/**/*.test.ts", "**/?(*.)+(spec|test).ts"],
   testPathIgnorePatterns: ["<rootDir>/__tests__/setup.ts"], // Exclude setup file
   setupFilesAfterEnv: ["<rootDir>/__tests__/setup.ts"],
-  // transform: {
-  //   "^.+\\.tsx?$": [
-  //     "ts-jest",
-  //     {
-  //       useESM: true,
-  //     },
-  //   ],
-  // },
+  transform: {
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        useESM: true,
+      },
+    ],
+    "node_modules/chalk/.+\\.js$": "<rootDir>/esm-transformer.js",
+  },
 };

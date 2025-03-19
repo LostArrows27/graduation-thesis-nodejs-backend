@@ -16,7 +16,7 @@ export function chooseRandomOutroImage(
 
   const shuffledPaths = allImagePaths.sort(() => 0.5 - random(null));
 
-  if (shuffledPaths.length < 4) {
+  if (shuffledPaths.length < 5) {
     if (shuffledPaths.length === 0) {
       throw Error("No chapter available");
     }
@@ -27,17 +27,22 @@ export function chooseRandomOutroImage(
         shuffledPaths[0],
         shuffledPaths[0],
         shuffledPaths[0],
+        shuffledPaths[0],
       ];
     }
 
     if (shuffledPaths.length === 2) {
-      shuffledPaths.push(shuffledPaths[0], shuffledPaths[1]);
+      shuffledPaths.push(shuffledPaths[0], shuffledPaths[1], shuffledPaths[0]);
     }
 
     if (shuffledPaths.length === 3) {
+      shuffledPaths.push(shuffledPaths[0], shuffledPaths[1]);
+    }
+
+    if (shuffledPaths.length === 4) {
       shuffledPaths.push(shuffledPaths[0]);
     }
   }
 
-  return shuffledPaths.slice(0, 4);
+  return shuffledPaths.slice(0, 5);
 }

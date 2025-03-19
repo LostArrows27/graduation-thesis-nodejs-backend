@@ -14,7 +14,7 @@
   "compilerOptions": {
     "types": ["node", "jest"],
     "target": "ES2018",
-    "module": "ESNext",
+    "module": "esnext",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,

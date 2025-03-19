@@ -52,13 +52,13 @@ export const checkEditSchemaParamsMiddleware = async (
     return;
   }
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("video_render")
     .select("schema")
     .eq("id", renderQueueId)
     .single();
 
-  if (!data) {
+  if (!data || error) {
     res.status(400).json({ error: "Invalid renderQueueId" });
     return;
   }

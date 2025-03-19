@@ -28,12 +28,12 @@ const OutroScene = ({ data }: OutroProps) => {
     {
       extrapolateRight: "clamp",
       extrapolateLeft: "clamp",
-    },
+    }
   );
 
   const [fadeGifPath, filmGifPath, bgPath] = useMemoAssetArray(
     ["fade.gif", "film.gif", "bg.jpg"],
-    outroAssetPath,
+    outroAssetPath
   );
 
   return (

@@ -104,6 +104,12 @@ schemaRouter.post(
           clusterGroups[person.cluster_id].push(person);
         });
 
+        Object.entries(clusterGroups).forEach(([clusterId, persons]) => {
+          if (persons.length <= 1) {
+            delete clusterGroups[clusterId];
+          }
+        });
+
         const sortedClusters = Object.entries(clusterGroups)
           .map(([clusterId, persons]) => ({
             clusterId,
