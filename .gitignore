@@ -1,7 +1,5 @@
 package-lock.json
 
-client/*
-
 server/node_modules/*
 server/.env
 server/out
