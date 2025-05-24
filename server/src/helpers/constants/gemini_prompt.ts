@@ -34,7 +34,7 @@ export const generateChaptersTitlePrompt = (place_arr: string[]) => {
   return prompt;
 };
 
-// slide[] -> caption[
+// slide[] -> caption[]
 export const generateSlidesCaptionPrompt = (
   slide_req: SlideCaptionsRequest
 ) => {
